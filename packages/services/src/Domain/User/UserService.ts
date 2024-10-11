@@ -40,6 +40,10 @@ import { EncryptionProviderInterface } from '../Encryption/EncryptionProviderInt
 import { ReencryptTypeAItems } from '../Encryption/UseCase/TypeA/ReencryptTypeAItems'
 import { DecryptErroredPayloads } from '../Encryption/UseCase/DecryptErroredPayloads'
 
+const cleanedEmailString = (email: string) => {
+  return email.trim().toLowerCase()
+}
+
 export class UserService
   extends AbstractService<AccountEvent, AccountEventData>
   implements UserServiceInterface, InternalEventHandlerInterface
@@ -593,13 +597,15 @@ export class UserService
       }
     }
 
+    const newEmail = parameters.newEmail ? cleanedEmailString(parameters.newEmail) : undefined
+
     const user = this.sessions.getUser() as User
     const currentEmail = user.email
     const { currentRootKey, newRootKey } = await this.recomputeRootKeysForCredentialChange({
       currentPassword: parameters.currentPassword,
       currentEmail,
       origination: parameters.origination,
-      newEmail: parameters.newEmail,
+      newEmail: newEmail,
       newPassword: parameters.newPassword,
     })
 
@@ -609,7 +615,7 @@ export class UserService
       currentServerPassword: currentRootKey.serverPassword as string,
       newRootKey: newRootKey,
       wrappingKey,
-      newEmail: parameters.newEmail,
+      newEmail: newEmail,
     })
 
     this.unlockSyncing()

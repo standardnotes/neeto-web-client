@@ -27,6 +27,7 @@ import {
   ProposedSecondsToDeferUILevelSessionExpirationDuringActiveInteraction,
   SNNote,
   VaultUserServiceEvent,
+  LocalPrefKey,
 } from '@standardnotes/snjs'
 import { confirmDialog, DELETE_NOTE_KEYBOARD_COMMAND, KeyboardKey } from '@standardnotes/ui-services'
 import { ChangeEventHandler, createRef, CSSProperties, FocusEvent, KeyboardEventHandler, RefObject } from 'react'
@@ -123,7 +124,7 @@ class NoteView extends AbstractComponent<NoteViewProps, State> {
       availableStackComponents: [],
       editorStateDidLoad: false,
       editorTitle: '',
-      editorLineWidth: PrefDefaults[PrefKey.EditorLineWidth],
+      editorLineWidth: PrefDefaults[LocalPrefKey.EditorLineWidth],
       isDesktop: isDesktopApplication(),
       noteStatus: undefined,
       noteLocked: this.controller.item.locked,
@@ -371,6 +372,7 @@ class NoteView extends AbstractComponent<NoteViewProps, State> {
     }
 
     switch (eventName) {
+      case ApplicationEvent.LocalPreferencesChanged:
       case ApplicationEvent.PreferencesChanged:
         void this.reloadPreferences()
         void this.reloadStackComponents()
@@ -673,9 +675,9 @@ class NoteView extends AbstractComponent<NoteViewProps, State> {
 
   async reloadPreferences() {
     log(LoggingDomain.NoteView, 'Reload preferences')
-    const monospaceFont = this.application.getPreference(
-      PrefKey.EditorMonospaceEnabled,
-      PrefDefaults[PrefKey.EditorMonospaceEnabled],
+    const monospaceFont = this.application.preferences.getLocalValue(
+      LocalPrefKey.EditorMonospaceEnabled,
+      PrefDefaults[LocalPrefKey.EditorMonospaceEnabled],
     )
 
     const updateSavingIndicator = this.application.getPreference(

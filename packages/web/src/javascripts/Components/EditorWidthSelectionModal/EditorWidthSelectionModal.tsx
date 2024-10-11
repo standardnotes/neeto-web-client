@@ -1,5 +1,5 @@
 import { MutuallyExclusiveMediaQueryBreakpoints, useMediaQuery } from '@/Hooks/useMediaQuery'
-import { classNames, EditorLineWidth, PrefKey, SNNote, PrefDefaults } from '@standardnotes/snjs'
+import { classNames, EditorLineWidth, SNNote, PrefDefaults, LocalPrefKey } from '@standardnotes/snjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Button from '../Button/Button'
 import Modal, { ModalAction } from '../Modal/Modal'
@@ -160,14 +160,14 @@ const EditorWidthSelectionModalWrapper = () => {
 
   const lineWidth = note
     ? notesController.getEditorWidthForNote(note)
-    : application.getPreference(PrefKey.EditorLineWidth, PrefDefaults[PrefKey.EditorLineWidth])
+    : application.preferences.getLocalValue(LocalPrefKey.EditorLineWidth, PrefDefaults[LocalPrefKey.EditorLineWidth])
 
   const setLineWidth = useCallback(
     (lineWidth: EditorLineWidth, setGlobally: boolean) => {
       if (note && !setGlobally) {
         notesController.setNoteEditorWidth(note, lineWidth).catch(console.error)
       } else {
-        application.setPreference(PrefKey.EditorLineWidth, lineWidth).catch(console.error)
+        application.preferences.setLocalValue(LocalPrefKey.EditorLineWidth, lineWidth)
       }
     },
     [application, note, notesController],

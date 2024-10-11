@@ -82,8 +82,8 @@ const ContentList: FunctionComponent<Props> = ({ application, items, selectedUui
     <div
       className={classNames(
         'infinite-scroll overflow-y-auto overflow-x-hidden focus:shadow-none focus:outline-none',
-        'md:max-h-full md:overflow-y-hidden md:hover:overflow-y-auto pointer-coarse:md:overflow-y-auto',
-        'flex-grow pb-2 md:hover:[overflow-y:_overlay]',
+        'md:max-h-full pointer-coarse:md:overflow-y-auto',
+        'flex-grow pb-2',
       )}
       id={ElementIds.ContentList}
       onScroll={onScroll}

@@ -1,6 +1,6 @@
 {
   "name": "@standardnotes/styles",
-  "version": "1.8.2",
+  "version": "1.8.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "publishConfig": {
@@ -15,9 +15,8 @@
     "css-loader": "*",
     "eslint": "*",
     "mini-css-extract-plugin": "^2.6.1",
-    "node-sass": "^8.0.0",
     "prettier": "*",
-    "sass": "^1.56.1",
+    "sass": "^1.77.6",
     "sass-loader": "*",
     "style-loader": "~3.3.1",
     "typescript": "*",

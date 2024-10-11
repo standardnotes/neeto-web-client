@@ -6,6 +6,9 @@ import FilePreview from '@/Components/FilePreview/FilePreview'
 import { FileItem } from '@standardnotes/snjs'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection'
+import { observer } from 'mobx-react-lite'
+import Spinner from '@/Components/Spinner/Spinner'
+import { FilesControllerEvent } from '@/Controllers/FilesController'
 
 export type FileComponentProps = Readonly<{
   className: Readonly<{
@@ -19,10 +22,11 @@ export type FileComponentProps = Readonly<{
   setZoomLevel: (zoomLevel: number) => void
 }>
 
-export function FileComponent({ className, format, nodeKey, fileUuid, zoomLevel, setZoomLevel }: FileComponentProps) {
+function FileComponent({ className, format, nodeKey, fileUuid, zoomLevel, setZoomLevel }: FileComponentProps) {
   const application = useApplication()
   const [editor] = useLexicalComposerContext()
-  const file = useMemo(() => application.items.findItem<FileItem>(fileUuid), [application, fileUuid])
+  const [file, setFile] = useState(() => application.items.findItem<FileItem>(fileUuid))
+  const uploadProgress = application.filesController.uploadProgressMap.get(fileUuid)
 
   const [canLoad, setCanLoad] = useState(false)
 
@@ -90,6 +94,41 @@ export function FileComponent({ className, format, nodeKey, fileUuid, zoomLevel,
     )
   }, [editor, isSelected, nodeKey, setSelected])
 
+  useEffect(() => {
+    return application.filesController.addEventObserver((event, data) => {
+      if (event === FilesControllerEvent.FileUploadFinished && data[FilesControllerEvent.FileUploadFinished]) {
+        const { uploadedFile } = data[FilesControllerEvent.FileUploadFinished]
+        if (uploadedFile.uuid === fileUuid) {
+          setFile(uploadedFile)
+        }
+      }
+    })
+  }, [application.filesController, fileUuid])
+
+  if (uploadProgress && (uploadProgress.progress < 100 || !file)) {
+    const progress = uploadProgress.progress
+    return (
+      <BlockWithAlignableContents className={className} format={format} nodeKey={nodeKey}>
+        <div className="flex flex-col items-center justify-center gap-2 p-4 text-center" ref={blockWrapperRef}>
+          <div className="flex items-center gap-2">
+            <Spinner className="h-4 w-4" />
+            Uploading file "{uploadProgress.file.name}"... ({progress}%)
+          </div>
+          <div className="w-full max-w-[50%] overflow-hidden rounded bg-contrast">
+            <div
+              className="h-2 rounded rounded-tl-none bg-info transition-[width] duration-100"
+              role="progressbar"
+              style={{
+                width: `${progress}%`,
+              }}
+              aria-valuenow={progress}
+            />
+          </div>
+        </div>
+      </BlockWithAlignableContents>
+    )
+  }
+
   if (!file) {
     return (
       <BlockWithAlignableContents className={className} format={format} nodeKey={nodeKey}>
@@ -114,3 +153,5 @@ export function FileComponent({ className, format, nodeKey, fileUuid, zoomLevel,
     </BlockWithAlignableContents>
   )
 }
+
+export default observer(FileComponent)

@@ -1,8 +1,8 @@
 import { WebApplication } from '@/Application/WebApplication'
 import { HeadlessSuperConverter } from '@/Components/SuperEditor/Tools/HeadlessSuperConverter'
 import { NoteType, PrefKey, SNNote, PrefDefaults, FileItem, PrefValue } from '@standardnotes/snjs'
-import { WebApplicationInterface, parseAndCreateZippableFileName } from '@standardnotes/ui-services'
-import { ZipDirectoryEntry } from '@zip.js/zip.js'
+import { WebApplicationInterface } from '@standardnotes/ui-services'
+import { type ZipDirectoryEntry } from '@zip.js/zip.js'
 // @ts-expect-error Using inline loaders to load CSS as string
 import superEditorCSS from '!css-loader?{"sourceMap":false}!sass-loader!../Components/SuperEditor/Lexical/Theme/editor.scss'
 // @ts-expect-error Using inline loaders to load CSS as string
@@ -10,7 +10,7 @@ import snColorsCSS from '!css-loader?{"sourceMap":false}!sass-loader!@standardno
 // @ts-expect-error Using inline loaders to load CSS as string
 import exportOverridesCSS from '!css-loader?{"sourceMap":false}!sass-loader!../Components/SuperEditor/Lexical/Theme/export-overrides.scss'
 import { getBase64FromBlob } from './Utils'
-import { parseFileName } from '@standardnotes/filepicker'
+import { parseFileName, parseAndCreateZippableFileName } from '@standardnotes/utils'
 
 export const getNoteFormat = (application: WebApplicationInterface, note: SNNote) => {
   if (note.noteType === NoteType.Super) {
@@ -156,6 +156,7 @@ const noteRequiresFolder = (
 
 const addEmbeddedFilesToFolder = async (application: WebApplication, note: SNNote, folder: ZipDirectoryEntry) => {
   try {
+    const filenameCounts: Record<string, number> = {}
     const embeddedFileIDs = headlessSuperConverter.getEmbeddedFileIDsFromSuperString(note.text)
     for (const embeddedFileID of embeddedFileIDs) {
       const fileItem = application.items.findItem<FileItem>(embeddedFileID)
@@ -166,7 +167,14 @@ const addEmbeddedFilesToFolder = async (application: WebApplication, note: SNNot
       if (!embeddedFileBlob) {
         continue
       }
-      folder.addBlob(parseAndCreateZippableFileName(fileItem.title), embeddedFileBlob)
+      filenameCounts[fileItem.title] =
+        filenameCounts[fileItem.title] == undefined ? 0 : filenameCounts[fileItem.title] + 1
+      let name = fileItem.title
+      if (filenameCounts[fileItem.title] > 0) {
+        const { name: _name, ext } = parseFileName(fileItem.title)
+        name = `${_name}-${fileItem.uuid}.${ext}`
+      }
+      folder.addBlob(parseAndCreateZippableFileName(name), embeddedFileBlob)
     }
   } catch (error) {
     console.error(error)
@@ -230,7 +238,7 @@ export const createNoteExport = async (
 
   for (const note of notes) {
     const blob = await getNoteBlob(application, note, superEmbedBehaviorPref)
-    const _name = getNoteFileName(application, note)
+    const _name = parseAndCreateZippableFileName(getNoteFileName(application, note))
 
     filenameCounts[_name] = filenameCounts[_name] == undefined ? 0 : filenameCounts[_name] + 1
 

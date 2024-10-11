@@ -1,4 +1,4 @@
-import { INSERT_FILE_COMMAND } from '../Commands'
+import { INSERT_FILE_COMMAND, UPLOAD_AND_INSERT_FILE_COMMAND } from '../Commands'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 
 import { useEffect, useState } from 'react'
@@ -19,45 +19,24 @@ import { FilesControllerEvent } from '@/Controllers/FilesController'
 import { useLinkingController } from '@/Controllers/LinkingControllerProvider'
 import { useApplication } from '@/Components/ApplicationProvider'
 import { SNNote } from '@standardnotes/snjs'
-import Spinner from '../../../Spinner/Spinner'
 import Modal from '../../Lexical/UI/Modal'
 import Button from '@/Components/Button/Button'
 import { isMobileScreen } from '../../../../Utils'
 
 export const OPEN_FILE_UPLOAD_MODAL_COMMAND = createCommand('OPEN_FILE_UPLOAD_MODAL_COMMAND')
 
-function UploadFileDialog({ currentNote, onClose }: { currentNote: SNNote; onClose: () => void }) {
-  const application = useApplication()
+function UploadFileDialog({ onClose }: { onClose: () => void }) {
   const [editor] = useLexicalComposerContext()
-  const filesController = useFilesController()
-  const linkingController = useLinkingController()
 
   const [file, setFile] = useState<File>()
-  const [isUploadingFile, setIsUploadingFile] = useState(false)
 
   const onClick = () => {
     if (!file) {
       return
     }
 
-    setIsUploadingFile(true)
-    filesController
-      .uploadNewFile(file)
-      .then((uploadedFile) => {
-        if (!uploadedFile) {
-          return
-        }
-        editor.dispatchCommand(INSERT_FILE_COMMAND, uploadedFile.uuid)
-        void linkingController.linkItemToSelectedItem(uploadedFile)
-        void application.changeAndSaveItem.execute(uploadedFile, (mutator) => {
-          mutator.protected = currentNote.protected
-        })
-      })
-      .catch(console.error)
-      .finally(() => {
-        setIsUploadingFile(false)
-        onClose()
-      })
+    editor.dispatchCommand(UPLOAD_AND_INSERT_FILE_COMMAND, file)
+    onClose()
   }
 
   return (
@@ -72,13 +51,9 @@ function UploadFileDialog({ currentNote, onClose }: { currentNote: SNNote; onClo
         }}
       />
       <div className="mt-1.5 flex justify-end">
-        {isUploadingFile ? (
-          <Spinner className="h-4 w-4" />
-        ) : (
-          <Button onClick={onClick} disabled={!file} small={isMobileScreen()}>
-            Upload
-          </Button>
-        )}
+        <Button onClick={onClick} disabled={!file} small={isMobileScreen()}>
+          Upload
+        </Button>
       </div>
     </>
   )
@@ -99,17 +74,23 @@ export default function FilePlugin({ currentNote }: { currentNote: SNNote }): JS
 
     const uploadFilesList = (files: FileList) => {
       Array.from(files).forEach(async (file) => {
-        try {
-          const uploadedFile = await filesController.uploadNewFile(file)
-          if (uploadedFile) {
-            editor.dispatchCommand(INSERT_FILE_COMMAND, uploadedFile.uuid)
-            void linkingController.linkItemToSelectedItem(uploadedFile)
-            void application.changeAndSaveItem.execute(uploadedFile, (mutator) => {
-              mutator.protected = currentNote.protected
-            })
-          }
-        } catch (error) {
-          console.error(error)
+        editor.dispatchCommand(UPLOAD_AND_INSERT_FILE_COMMAND, file)
+      })
+    }
+
+    const insertFileNode = (uuid: string, onInsert?: (node: FileNode) => void) => {
+      editor.update(() => {
+        const fileNode = $createFileNode(uuid)
+        $insertNodes([fileNode])
+        if ($isRootOrShadowRoot(fileNode.getParentOrThrow())) {
+          $wrapNodeInElement(fileNode, $createParagraphNode).selectEnd()
+        }
+        const newLineNode = $createParagraphNode()
+        fileNode.getParentOrThrow().insertAfter(newLineNode)
+        newLineNode.selectEnd()
+        editor.focus()
+        if (onInsert) {
+          onInsert(fileNode)
         }
       })
     }
@@ -118,14 +99,34 @@ export default function FilePlugin({ currentNote }: { currentNote: SNNote }): JS
       editor.registerCommand<string>(
         INSERT_FILE_COMMAND,
         (payload) => {
-          const fileNode = $createFileNode(payload)
-          $insertNodes([fileNode])
-          if ($isRootOrShadowRoot(fileNode.getParentOrThrow())) {
-            $wrapNodeInElement(fileNode, $createParagraphNode).selectEnd()
-          }
-          const newLineNode = $createParagraphNode()
-          fileNode.getParentOrThrow().insertAfter(newLineNode)
-
+          insertFileNode(payload)
+          return true
+        },
+        COMMAND_PRIORITY_EDITOR,
+      ),
+      editor.registerCommand(
+        UPLOAD_AND_INSERT_FILE_COMMAND,
+        (file) => {
+          const note = currentNote
+          let fileNode: FileNode | undefined
+          filesController
+            .uploadNewFile(file, {
+              showToast: false,
+              onUploadStart(fileUuid) {
+                insertFileNode(fileUuid, (node) => (fileNode = node))
+              },
+            })
+            .then((uploadedFile) => {
+              if (uploadedFile) {
+                void linkingController.linkItems(note, uploadedFile)
+                void application.changeAndSaveItem.execute(uploadedFile, (mutator) => {
+                  mutator.protected = note.protected
+                })
+              } else {
+                editor.update(() => fileNode?.remove())
+              }
+            })
+            .catch(console.error)
           return true
         },
         COMMAND_PRIORITY_EDITOR,
@@ -150,28 +151,26 @@ export default function FilePlugin({ currentNote }: { currentNote: SNNote }): JS
         },
         COMMAND_PRIORITY_NORMAL,
       ),
-      editor.registerNodeTransform(FileNode, (node) => {
-        /**
-         * When adding the node we wrap it with a paragraph to avoid insertion errors,
-         * however that causes issues with selection. We unwrap the node to fix that.
-         */
-        const parent = node.getParent()
-        if (!parent) {
-          return
-        }
-        if (parent.getChildrenSize() === 1) {
-          parent.insertBefore(node)
-          parent.remove()
-        }
-      }),
     )
-  }, [application, currentNote.protected, editor, filesController, linkingController])
+  }, [application, currentNote, editor, filesController, linkingController])
 
   useEffect(() => {
     const disposer = filesController.addEventObserver((event, data) => {
-      if (event === FilesControllerEvent.FileUploadedToNote) {
+      if (event === FilesControllerEvent.FileUploadedToNote && data[FilesControllerEvent.FileUploadedToNote]) {
         const fileUuid = data[FilesControllerEvent.FileUploadedToNote].uuid
         editor.dispatchCommand(INSERT_FILE_COMMAND, fileUuid)
+      } else if (event === FilesControllerEvent.UploadAndInsertFile && data[FilesControllerEvent.UploadAndInsertFile]) {
+        const { fileOrHandle } = data[FilesControllerEvent.UploadAndInsertFile]
+        if (fileOrHandle instanceof FileSystemFileHandle) {
+          fileOrHandle
+            .getFile()
+            .then((file) => {
+              editor.dispatchCommand(UPLOAD_AND_INSERT_FILE_COMMAND, file)
+            })
+            .catch(console.error)
+        } else {
+          editor.dispatchCommand(UPLOAD_AND_INSERT_FILE_COMMAND, fileOrHandle)
+        }
       }
     })
 
@@ -181,7 +180,7 @@ export default function FilePlugin({ currentNote }: { currentNote: SNNote }): JS
   if (showFileUploadModal) {
     return (
       <Modal onClose={() => setShowFileUploadModal(false)} title="Upload File">
-        <UploadFileDialog currentNote={currentNote} onClose={() => setShowFileUploadModal(false)} />
+        <UploadFileDialog onClose={() => setShowFileUploadModal(false)} />
       </Modal>
     )
   }

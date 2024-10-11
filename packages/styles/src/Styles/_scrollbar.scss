@@ -6,7 +6,7 @@
   $thumb-width: 4px;
 
   ::-webkit-scrollbar {
-    width: 17px;
+    width: 14px;
     height: 18px;
     border-left: none;
   }
@@ -42,13 +42,10 @@
       }
     }
   }
-
-  scrollbar-width: thin;
 }
 
-.windows-web,
-.windows-desktop {
-  .md\:hover\:overflow-y-auto {
-    scrollbar-gutter: stable;
-  }
+body:not(.chromium),
+.mac-desktop {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sn-stylekit-scrollbar-thumb-color) transparent;
 }

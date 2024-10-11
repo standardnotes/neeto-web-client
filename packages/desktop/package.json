@@ -1,7 +1,7 @@
 {
   "name": "@standardnotes/desktop",
   "main": "./app/dist/index.js",
-  "version": "3.110.63",
+  "version": "3.110.90",
   "license": "AGPL-3.0",
   "author": "Standard Notes.",
   "private": true,
@@ -35,7 +35,7 @@
     "hoistingLimits": "workspaces"
   },
   "dependencies": {
-    "@electron/remote": "^2.0.12",
+    "@electron/remote": "^2.1.2",
     "@standardnotes/domain-core": "^1.40.0",
     "@standardnotes/electron-clear-data": "1.1.1",
     "@standardnotes/web": "workspace:*",
@@ -43,7 +43,7 @@
     "compare-versions": "^6.1.0",
     "decrypt": "github:standardnotes/decrypt#master",
     "dotenv": "^16.3.1",
-    "electron": "27.0.0",
+    "electron": "31.1.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^6.1.4",
     "fs-extra": "^11.1.1",
@@ -55,6 +55,7 @@
     "@babel/core": "*",
     "@babel/preset-env": "*",
     "@electron/notarize": "^2.1.0",
+    "@electron/rebuild": "^3.6.0",
     "@types/fs-extra": "^11.0.1",
     "@types/lodash": "^4.14.189",
     "@types/mime-types": "^2.1.1",
@@ -65,7 +66,6 @@
     "babel-loader": "^9.1.0",
     "copy-webpack-plugin": "^11.0.0",
     "electron-builder": "^24.9.1",
-    "electron-rebuild": "^3.2.9",
     "eslint": "*",
     "eslint-config-prettier": "^8.9.0",
     "eslint-plugin-import": "^2.26.0",

@@ -70,7 +70,6 @@
 
 /* https://github.com/electron/electron/issues/37789 */
 .mac-desktop #navigation,
-.mac-desktop #navigation-content .section-title-bar .title,
 .mac-desktop #items-title-bar,
 .mac-desktop #editor-title-bar,
 .mac-desktop [data-preferences-header] {

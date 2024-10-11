@@ -1,7 +1,7 @@
 import { DOMConversionMap, DOMExportOutput, EditorConfig, ElementFormatType, LexicalEditor, NodeKey } from 'lexical'
 import { DecoratorBlockNode } from '@lexical/react/LexicalDecoratorBlockNode'
 import { $createFileNode, convertToFileElement } from './FileUtils'
-import { FileComponent } from './FileComponent'
+import FileComponent from './FileComponent'
 import { SerializedFileNode } from './SerializedFileNode'
 import { ItemNodeInterface } from '../../ItemNodeInterface'
 

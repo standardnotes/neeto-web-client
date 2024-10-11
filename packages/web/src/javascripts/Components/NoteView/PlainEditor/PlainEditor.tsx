@@ -11,9 +11,9 @@ import {
   EditorFontSize,
   EditorLineHeight,
   isPayloadSourceRetrieved,
-  PrefKey,
   WebAppEvent,
   PrefDefaults,
+  LocalPrefKey,
 } from '@standardnotes/snjs'
 import { isIOS, TAB_COMMAND } from '@standardnotes/ui-services'
 import {
@@ -174,8 +174,14 @@ export const PlainEditor = forwardRef<PlainEditorInterface, Props>(
     }, [controller, focusEditor])
 
     const reloadPreferences = useCallback(() => {
-      const lineHeight = application.getPreference(PrefKey.EditorLineHeight, PrefDefaults[PrefKey.EditorLineHeight])
-      const fontSize = application.getPreference(PrefKey.EditorFontSize, PrefDefaults[PrefKey.EditorFontSize])
+      const lineHeight = application.preferences.getLocalValue(
+        LocalPrefKey.EditorLineHeight,
+        PrefDefaults[LocalPrefKey.EditorLineHeight],
+      )
+      const fontSize = application.preferences.getLocalValue(
+        LocalPrefKey.EditorFontSize,
+        PrefDefaults[LocalPrefKey.EditorFontSize],
+      )
 
       setLineHeight(lineHeight)
       setFontSize(fontSize)

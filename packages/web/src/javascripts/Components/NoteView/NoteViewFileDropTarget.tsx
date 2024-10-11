@@ -1,6 +1,6 @@
 import { FilesController } from '@/Controllers/FilesController'
 import { LinkingController } from '@/Controllers/LinkingController'
-import { SNNote } from '@standardnotes/snjs'
+import { NoteType, SNNote } from '@standardnotes/snjs'
 import { useEffect } from 'react'
 import { useApplication } from '../ApplicationProvider'
 import { useFileDragNDrop } from '../FileDragNDropProvider'
@@ -20,17 +20,28 @@ const NoteViewFileDropTarget = ({ note, linkingController, noteViewElement, file
     const target = noteViewElement
 
     if (target) {
-      addDragTarget(target, {
-        tooltipText: 'Drop your files to upload and link them to the current note',
-        callback: async (uploadedFile) => {
-          await linkingController.linkItems(note, uploadedFile)
-          void application.changeAndSaveItem.execute(uploadedFile, (mutator) => {
-            mutator.protected = note.protected
-          })
-          filesController.notifyObserversOfUploadedFileLinkingToCurrentNote(uploadedFile.uuid)
-        },
-        note,
-      })
+      const tooltipText = 'Drop your files to upload and link them to the current note'
+      if (note.noteType === NoteType.Super) {
+        addDragTarget(target, {
+          tooltipText,
+          handleFileUpload: (fileOrHandle) => {
+            filesController.uploadAndInsertFileToCurrentNote(fileOrHandle)
+          },
+          note,
+        })
+      } else {
+        addDragTarget(target, {
+          tooltipText,
+          callback: async (uploadedFile) => {
+            await linkingController.linkItems(note, uploadedFile)
+            void application.changeAndSaveItem.execute(uploadedFile, (mutator) => {
+              mutator.protected = note.protected
+            })
+            filesController.notifyObserversOfUploadedFileLinkingToCurrentNote(uploadedFile.uuid)
+          },
+          note,
+        })
+      }
     }
 
     return () => {

@@ -70,14 +70,11 @@ import {
   UserApiServiceInterface,
   UserRegistrationResponseBody,
 } from '@standardnotes/api'
+import { cleanedEmailString } from './cleanedEmailString'
 
 export const MINIMUM_PASSWORD_LENGTH = 8
 export const MissingAccountParams = 'missing-params'
 const ThirtyMinutes = 30 * 60 * 1000
-
-const cleanedEmailString = (email: string) => {
-  return email.trim().toLowerCase()
-}
 
 /**
  * The session manager is responsible for loading initial user state, and any relevant
@@ -659,7 +656,7 @@ export class SessionManager
       currentServerPassword: parameters.currentServerPassword,
       newServerPassword: parameters.newRootKey.serverPassword as string,
       newKeyParams: parameters.newRootKey.keyParams,
-      newEmail: parameters.newEmail,
+      newEmail: parameters.newEmail ? cleanedEmailString(parameters.newEmail) : undefined,
     })
 
     const oldKeys = this._getKeyPairs.execute()

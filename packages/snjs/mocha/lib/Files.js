@@ -1,3 +1,5 @@
+import * as Utils from './Utils.js'
+
 export async function uploadFile(fileService, buffer, name, ext, chunkSize, vault, options = {}) {
   const byteLength = options.byteLengthOverwrite || buffer.byteLength
   const operation = await fileService.beginNewFileUpload(byteLength, vault)
@@ -17,7 +19,9 @@ export async function uploadFile(fileService, buffer, name, ext, chunkSize, vaul
     }
   }
 
-  const file = await fileService.finishUpload(operation, name, ext)
+  const uuid = Utils.generateUuid()
+
+  const file = await fileService.finishUpload(operation, { name, mimeType: ext }, uuid)
 
   return file
 }

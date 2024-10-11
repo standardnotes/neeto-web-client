@@ -13,6 +13,7 @@ const LockInterval = {
   Immediate: 1,
   OneMinute: 60 * MILLISECONDS_PER_SECOND,
   FiveMinutes: 300 * MILLISECONDS_PER_SECOND,
+  TenMinutes: 600 * MILLISECONDS_PER_SECOND,
   OneHour: 3600 * MILLISECONDS_PER_SECOND,
 }
 
@@ -132,6 +133,10 @@ export class AutolockService extends AbstractService {
       {
         value: LockInterval.FiveMinutes,
         label: '5m',
+      },
+      {
+        value: LockInterval.TenMinutes,
+        label: '10m',
       },
       {
         value: LockInterval.OneHour,

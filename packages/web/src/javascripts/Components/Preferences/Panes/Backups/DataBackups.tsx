@@ -1,4 +1,4 @@
-import { alertDialog, sanitizeFileName } from '@standardnotes/ui-services'
+import { alertDialog } from '@standardnotes/ui-services'
 import {
   STRING_IMPORT_SUCCESS,
   STRING_INVALID_IMPORT_FILE,
@@ -10,6 +10,7 @@ import {
   STRING_ENC_NOT_ENABLED,
 } from '@/Constants/Strings'
 import { BackupFile } from '@standardnotes/snjs'
+import { sanitizeFileName } from '@standardnotes/utils'
 import { ChangeEventHandler, MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react'
 import { WebApplication } from '@/Application/WebApplication'
 import { observer } from 'mobx-react-lite'

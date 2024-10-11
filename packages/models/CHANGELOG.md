@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.56.1](https://github.com/standardnotes/app/compare/@standardnotes/models@1.56.0...@standardnotes/models@1.56.1) (2024-05-07)
+
+**Note:** Version bump only for package @standardnotes/models
+
+# [1.56.0](https://github.com/standardnotes/app/compare/@standardnotes/models@1.55.3...@standardnotes/models@1.56.0) (2024-04-24)
+
+### Features
+
+* Switched editor appearance preferences to be local instead of synced ([#2870](https://github.com/standardnotes/app/issues/2870)) ([594a606](https://github.com/standardnotes/app/commit/594a6061b2af619c5f585d6327fd4c3f20dac740))
+
 ## [1.55.3](https://github.com/standardnotes/app/compare/@standardnotes/models@1.55.2...@standardnotes/models@1.55.3) (2024-04-10)
 
 **Note:** Version bump only for package @standardnotes/models

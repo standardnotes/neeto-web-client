@@ -6,10 +6,11 @@ import com.reactnativecommunity.webview.RNCWebViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import android.view.inputmethod.InputConnectionWrapper;
 import com.facebook.react.module.annotations.ReactModule;
+import com.reactnativecommunity.webview.RNCWebViewWrapper;
+
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.webkit.WebView;
 
 @ReactModule(name = CustomWebViewManager.REACT_CLASS)
 public class CustomWebViewManager extends RNCWebViewManager {
@@ -60,7 +61,7 @@ public class CustomWebViewManager extends RNCWebViewManager {
 	}
 
 	@Override
-	public RNCWebView createViewInstance(ThemedReactContext reactContext) {
+	public RNCWebViewWrapper createViewInstance(ThemedReactContext reactContext) {
 		return super.createViewInstance(reactContext, new CustomWebView(reactContext));
 	}
 
@@ -69,7 +70,6 @@ public class CustomWebViewManager extends RNCWebViewManager {
 		return REACT_CLASS;
 	}
 
-	@Override
 	protected void addEventEmitters(ThemedReactContext reactContext, RNCWebView view) {
 		view.setWebViewClient(new CustomWebViewClient());
 	}

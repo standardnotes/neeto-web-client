@@ -1,4 +1,4 @@
-import { parseFileName } from '@standardnotes/filepicker'
+import { parseFileName, createZippableFileName, sanitizeFileName } from '@standardnotes/utils'
 import {
   BackupFile,
   BackupFileDecryptedContextualPayload,
@@ -7,22 +7,6 @@ import {
 } from '@standardnotes/models'
 import { ContentType } from '@standardnotes/domain-core'
 import { ApplicationInterface } from '@standardnotes/services'
-
-export function sanitizeFileName(name: string): string {
-  return name.trim().replace(/[.\\/:"?*|<>]/g, '_')
-}
-
-function zippableFileName(name: string, suffix = '', format = 'txt'): string {
-  const sanitizedName = sanitizeFileName(name)
-  const nameEnd = suffix + '.' + format
-  const maxFileNameLength = 100
-  return sanitizedName.slice(0, maxFileNameLength - nameEnd.length) + nameEnd
-}
-
-export function parseAndCreateZippableFileName(name: string, suffix = '') {
-  const { name: parsedName, ext } = parseFileName(name)
-  return zippableFileName(parsedName, suffix, ext)
-}
 
 type ZippableData = {
   name: string
@@ -87,7 +71,7 @@ export class ArchiveManager {
       type: 'text/plain',
     })
 
-    const fileName = zippableFileName('Standard Notes Backup and Import File')
+    const fileName = createZippableFileName('Standard Notes Backup and Import File')
     await zipWriter.add(fileName, new zip.BlobReader(blob))
 
     for (let index = 0; index < items.length; index++) {
@@ -109,7 +93,7 @@ export class ArchiveManager {
 
       const blob = new Blob([contents], { type: 'text/plain' })
       const fileName =
-        `Items/${sanitizeFileName(item.content_type)}/` + zippableFileName(name, `-${item.uuid.split('-')[0]}`)
+        `Items/${sanitizeFileName(item.content_type)}/` + createZippableFileName(name, `-${item.uuid.split('-')[0]}`)
       await zipWriter.add(fileName, new zip.BlobReader(blob))
     }
 
@@ -137,7 +121,7 @@ export class ArchiveManager {
       const currentFileNameIndex = filenameCounts[file.name]
 
       await writer.add(
-        zippableFileName(name, currentFileNameIndex > 0 ? ` - ${currentFileNameIndex}` : '', ext),
+        createZippableFileName(name, currentFileNameIndex > 0 ? ` - ${currentFileNameIndex}` : '', ext),
         new zip.BlobReader(file.content),
       )
     }

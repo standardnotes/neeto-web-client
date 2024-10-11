@@ -1,9 +1,9 @@
 import {
   ContentType,
   EditorLineHeightValues,
+  LocalPrefKey,
   NoteContent,
   NoteType,
-  PrefKey,
   SNNote,
   classNames,
   isUIFeatureAnIframeFeature,
@@ -17,7 +17,7 @@ import { BlocksEditor } from '../SuperEditor/BlocksEditor'
 import { BlocksEditorComposer } from '../SuperEditor/BlocksEditorComposer'
 import { useLinkingController } from '@/Controllers/LinkingControllerProvider'
 import LinkedItemBubblesContainer from '../LinkedItems/LinkedItemBubblesContainer'
-import usePreference from '@/Hooks/usePreference'
+import { useLocalPreference } from '@/Hooks/usePreference'
 import { useResponsiveEditorFontSize } from '@/Utils/getPlaintextFontSize'
 import { getScrollParent } from '@/Utils'
 
@@ -132,8 +132,8 @@ export const ReadonlyNoteContent = ({
     [note.noteType, onScroll, setScroller],
   )
 
-  const lineHeight = usePreference(PrefKey.EditorLineHeight)
-  const fontSize = usePreference(PrefKey.EditorFontSize)
+  const [lineHeight] = useLocalPreference(LocalPrefKey.EditorLineHeight)
+  const [fontSize] = useLocalPreference(LocalPrefKey.EditorFontSize)
   const responsiveFontSize = useResponsiveEditorFontSize(fontSize, false)
 
   return (

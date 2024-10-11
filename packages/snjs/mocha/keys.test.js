@@ -453,6 +453,37 @@ describe('keys', function () {
     await Factory.safeDeinit(application)
   })
 
+  it('changing email to all uppercase should allow sign in with lowercase', async function () {
+    await Factory.safeDeinit(application)
+    const realCryptoContext = await Factory.createAppContextWithRealCrypto()
+    await realCryptoContext.launch()
+
+    application = realCryptoContext.application
+
+    await Factory.registerUserToApplication({
+      application: application,
+      email: email,
+      password: password,
+    })
+    const mixedCaseEmail = `TheFooBar@bar.${UuidGenerator.GenerateUuid()}`
+
+    const changeEmailResponse = await application.changeEmail(mixedCaseEmail, password)
+
+    expect(changeEmailResponse.error).to.not.be.ok
+
+    application = await Factory.signOutApplicationAndReturnNew(application)
+    const loginResponse = await Factory.loginToApplication({
+      application: application,
+      email: mixedCaseEmail.toLowerCase(),
+      password: password,
+    })
+
+    expect(loginResponse).to.be.ok
+    expect(loginResponse.status).to.equal(200)
+
+    await Factory.safeDeinit(application)
+  }).timeout(Factory.TwentySecondTimeout)
+
   it('compares root keys', async function () {
     const keyParams = {}
     const a1 = await CreateNewRootKey({

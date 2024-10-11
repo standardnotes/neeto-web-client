@@ -1,4 +1,4 @@
-import { parseFileName } from '@standardnotes/filepicker'
+import { parseFileName } from '@standardnotes/utils'
 import {
   FeatureStatus,
   FeaturesClientInterface,

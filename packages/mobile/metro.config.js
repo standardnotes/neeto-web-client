@@ -17,12 +17,12 @@ const defaultConfig = getDefaultConfig(__dirname)
 
 /**
  * Metro configuration
- * https://facebook.github.io/metro/docs/configuration
+ * https://reactnative.dev/docs/metro
  *
  * @type {import('metro-config').MetroConfig}
  */
 const config = {
-  watchFolders: [__dirname, '../snjs'],
+  watchFolders: [path.resolve(__dirname, '../snjs')],
   transformer: {
     getTransformOptions: async () => ({
       transform: {

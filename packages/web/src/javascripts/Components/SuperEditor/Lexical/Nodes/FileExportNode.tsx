@@ -1,5 +1,5 @@
 import { DecoratorBlockNode, SerializedDecoratorBlockNode } from '@lexical/react/LexicalDecoratorBlockNode'
-import { parseAndCreateZippableFileName } from '@standardnotes/ui-services'
+import { parseAndCreateZippableFileName } from '@standardnotes/utils'
 import { DOMExportOutput, Spread } from 'lexical'
 
 type SerializedFileExportNode = Spread<

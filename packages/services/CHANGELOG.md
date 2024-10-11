@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.71.3](https://github.com/standardnotes/app/compare/@standardnotes/services@1.71.2...@standardnotes/services@1.71.3) (2024-09-20)
+
+### Bug Fixes
+
+* trim/lowercase email on email change ([#2886](https://github.com/standardnotes/app/issues/2886)) ([98304cc](https://github.com/standardnotes/app/commit/98304cc57df59f3d18061f97427f811f336b268f))
+
+## [1.71.2](https://github.com/standardnotes/app/compare/@standardnotes/services@1.71.1...@standardnotes/services@1.71.2) (2024-05-07)
+
+**Note:** Version bump only for package @standardnotes/services
+
+## [1.71.1](https://github.com/standardnotes/app/compare/@standardnotes/services@1.71.0...@standardnotes/services@1.71.1) (2024-05-06)
+
+**Note:** Version bump only for package @standardnotes/services
+
+# [1.71.0](https://github.com/standardnotes/app/compare/@standardnotes/services@1.70.11...@standardnotes/services@1.71.0) (2024-04-24)
+
+### Features
+
+* Switched editor appearance preferences to be local instead of synced ([#2870](https://github.com/standardnotes/app/issues/2870)) ([594a606](https://github.com/standardnotes/app/commit/594a6061b2af619c5f585d6327fd4c3f20dac740))
+
 ## [1.70.11](https://github.com/standardnotes/app/compare/@standardnotes/services@1.70.10...@standardnotes/services@1.70.11) (2024-04-20)
 
 **Note:** Version bump only for package @standardnotes/services

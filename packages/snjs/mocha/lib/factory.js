@@ -51,7 +51,14 @@ export async function createAppContextWithRealCrypto(identifier) {
   return createAppContext({ identifier, crypto: new SNWebCrypto() })
 }
 
-export async function createAppContext({ identifier, crypto, email, password, host, syncCallsThresholdPerMinute } = {}) {
+export async function createAppContext({
+  identifier,
+  crypto,
+  email,
+  password,
+  host,
+  syncCallsThresholdPerMinute,
+} = {}) {
   const context = new AppContext({ identifier, crypto, email, password, host, syncCallsThresholdPerMinute })
   await context.initialize()
   return context
@@ -250,7 +257,14 @@ export async function awaitFunctionInvokation(object, functionName) {
  * A new one must be created.
  */
 export async function signOutApplicationAndReturnNew(application) {
-  const isRealCrypto = application.crypto instanceof SNWebCrypto
+  if (!application) {
+    throw Error('[signOutApplicationAndReturnNew] Application is undefined')
+  }
+  if (!application.options.crypto) {
+    throw Error('[signOutApplicationAndReturnNew] Application.options.crypto is undefined')
+  }
+
+  const isRealCrypto = application.options.crypto instanceof SNWebCrypto
   await application.user.signOut()
   if (isRealCrypto) {
     return createInitAppWithRealCrypto()
@@ -260,7 +274,7 @@ export async function signOutApplicationAndReturnNew(application) {
 }
 
 export async function signOutAndBackIn(application, email, password) {
-  const isRealCrypto = application.crypto instanceof SNWebCrypto
+  const isRealCrypto = application.options.crypto instanceof SNWebCrypto
   await application.user.signOut()
   const newApplication = isRealCrypto ? await createInitAppWithRealCrypto() : await createInitAppWithFakeCrypto()
   await this.loginToApplication({

@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.38.1](https://github.com/standardnotes/app/compare/@standardnotes/ui-services@1.38.0...@standardnotes/ui-services@1.38.1) (2024-09-20)
+
+**Note:** Version bump only for package @standardnotes/ui-services
+
+# [1.38.0](https://github.com/standardnotes/app/compare/@standardnotes/ui-services@1.37.18...@standardnotes/ui-services@1.38.0) (2024-09-09)
+
+### Features
+
+* add 10 minute option in LockInterval ([#2879](https://github.com/standardnotes/app/issues/2879)) ([346ecff](https://github.com/standardnotes/app/commit/346ecff759968742c565b20bf2d3a184cfa3e74b))
+
+## [1.37.18](https://github.com/standardnotes/app/compare/@standardnotes/ui-services@1.37.17...@standardnotes/ui-services@1.37.18) (2024-06-22)
+
+**Note:** Version bump only for package @standardnotes/ui-services
+
+## [1.37.17](https://github.com/standardnotes/app/compare/@standardnotes/ui-services@1.37.16...@standardnotes/ui-services@1.37.17) (2024-05-07)
+
+**Note:** Version bump only for package @standardnotes/ui-services
+
+## [1.37.16](https://github.com/standardnotes/app/compare/@standardnotes/ui-services@1.37.15...@standardnotes/ui-services@1.37.16) (2024-05-06)
+
+**Note:** Version bump only for package @standardnotes/ui-services
+
+## [1.37.15](https://github.com/standardnotes/app/compare/@standardnotes/ui-services@1.37.14...@standardnotes/ui-services@1.37.15) (2024-05-04)
+
+**Note:** Version bump only for package @standardnotes/ui-services
+
+## [1.37.14](https://github.com/standardnotes/app/compare/@standardnotes/ui-services@1.37.13...@standardnotes/ui-services@1.37.14) (2024-04-24)
+
+**Note:** Version bump only for package @standardnotes/ui-services
+
 ## [1.37.13](https://github.com/standardnotes/app/compare/@standardnotes/ui-services@1.37.12...@standardnotes/ui-services@1.37.13) (2024-04-20)
 
 ### Bug Fixes

@@ -6,6 +6,7 @@ import { WebOrDesktopDevice } from '@/Application/Device/WebOrDesktopDevice'
 import { ApplicationGroupEvent, ApplicationGroupEventData, DeinitSource } from '@standardnotes/snjs'
 import { getPlatformString, isDesktopApplication } from '@/Utils'
 import DeallocateHandler from '../DeallocateHandler/DeallocateHandler'
+import { IS_CHROME } from '../../Constants/Constants'
 
 type Props = {
   server: string
@@ -76,6 +77,9 @@ class ApplicationGroupView extends Component<Props, State> {
     const platformString = getPlatformString()
     if (!document.body.classList.contains(platformString)) {
       document.body.classList.add(platformString)
+    }
+    if (IS_CHROME) {
+      document.body.classList.add('chromium')
     }
   }
 

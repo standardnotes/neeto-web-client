@@ -1,9 +1,16 @@
+import { EditorFontSize, EditorLineHeight, EditorLineWidth } from '@standardnotes/models'
+
 export enum LocalPrefKey {
   ActiveThemes = 'activeThemes',
   UseSystemColorScheme = 'useSystemColorScheme',
   UseTranslucentUI = 'useTranslucentUI',
   AutoLightThemeIdentifier = 'autoLightThemeIdentifier',
   AutoDarkThemeIdentifier = 'autoDarkThemeIdentifier',
+
+  EditorMonospaceEnabled = 'monospaceFont',
+  EditorLineHeight = 'editorLineHeight',
+  EditorLineWidth = 'editorLineWidth',
+  EditorFontSize = 'editorFontSize',
 }
 
 export type LocalPrefValue = {
@@ -12,4 +19,9 @@ export type LocalPrefValue = {
   [LocalPrefKey.UseTranslucentUI]: boolean
   [LocalPrefKey.AutoLightThemeIdentifier]: string
   [LocalPrefKey.AutoDarkThemeIdentifier]: string
+
+  [LocalPrefKey.EditorMonospaceEnabled]: boolean
+  [LocalPrefKey.EditorLineHeight]: EditorLineHeight
+  [LocalPrefKey.EditorLineWidth]: EditorLineWidth
+  [LocalPrefKey.EditorFontSize]: EditorFontSize
 }

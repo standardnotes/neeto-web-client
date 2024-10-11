@@ -945,7 +945,17 @@ export class LegacyApiService
   }
 
   private preprocessAuthenticatedErrorResponse(response: HttpResponse) {
-    if (response.status === HttpStatusCode.Unauthorized && this.session) {
+    if (!this.session) {
+      return
+    }
+
+    /**
+     * In most cases the ExpiredAccessToken erorr shouldn't reach this function, since if a 498 is caught, a refresh
+     * will automatically take place. However there does appear to be rare cases where for some reason the 498 falls through,
+     * perhaps because for example the server responds to a refresh request with a 498. In those cases, we'll just
+     * fallback here to the invalid session observer so that the user can be reprompted for auth.
+     */
+    if (response.status === HttpStatusCode.Unauthorized || response.status === HttpStatusCode.ExpiredAccessToken) {
       this.invalidSessionObserver?.(response.data.error?.tag === ErrorTag.RevokedSession)
     }
   }

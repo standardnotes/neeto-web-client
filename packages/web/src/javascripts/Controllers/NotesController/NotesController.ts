@@ -27,6 +27,7 @@ import {
   SyncServiceInterface,
   AlertService,
   ProtectionsClientInterface,
+  LocalPrefKey,
 } from '@standardnotes/snjs'
 import { makeObservable, observable, action, computed, runInAction } from 'mobx'
 import { AbstractViewController } from '../Abstract/AbstractViewController'
@@ -341,7 +342,10 @@ export class NotesController
   }
 
   getEditorWidthForNote(note: SNNote) {
-    return note.editorWidth ?? this.preferences.getValue(PrefKey.EditorLineWidth, PrefDefaults[PrefKey.EditorLineWidth])
+    return (
+      note.editorWidth ??
+      this.preferences.getLocalValue(LocalPrefKey.EditorLineWidth, PrefDefaults[LocalPrefKey.EditorLineWidth])
+    )
   }
 
   async setNoteEditorWidth(note: SNNote, editorWidth: EditorLineWidth) {

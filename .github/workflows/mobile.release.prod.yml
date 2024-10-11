@@ -16,6 +16,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Setup Java version
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
       - name: Export version from package.json
         run:
           echo "PACKAGE_VERSION=$(grep '"version"' ../web/package.json | cut -d '"' -f 4 | cut -d "-" -f 1)" >> $GITHUB_ENV
@@ -82,7 +87,11 @@ jobs:
         with:
           working-directory: 'packages/mobile'
       - name: Install dependencies
-        run: yarn install --immutable && bundle install && yarn install:pods
+        run: yarn install --immutable 
+      - name: Bundle install
+        run: bundle install
+      - name: Install pods
+        run: yarn install:pods
       - run: yarn build:mobile
       - name: Set ssh connection to Github
         uses: webfactory/ssh-agent@v0.4.1

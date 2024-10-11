@@ -1,5 +1,5 @@
 import { WebApplication } from '@/Application/WebApplication'
-import { EditorLineHeightValues, NoteType, PrefKey, SNNote } from '@standardnotes/snjs'
+import { EditorLineHeightValues, LocalPrefKey, NoteType, SNNote } from '@standardnotes/snjs'
 import { CSSProperties, FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react'
 import { ErrorBoundary } from '@/Utils/ErrorBoundary'
 import ImportPlugin from './Plugins/ImportPlugin/ImportPlugin'
@@ -8,7 +8,7 @@ import { spaceSeparatedStrings } from '@standardnotes/utils'
 import Modal, { ModalAction } from '@/Components/Modal/Modal'
 import { BlocksEditor } from './BlocksEditor'
 import { BlocksEditorComposer } from './BlocksEditorComposer'
-import usePreference from '@/Hooks/usePreference'
+import { useLocalPreference } from '@/Hooks/usePreference'
 import { useResponsiveEditorFontSize } from '@/Utils/getPlaintextFontSize'
 
 const NotePreviewCharLimit = 160
@@ -125,8 +125,8 @@ export const SuperNoteImporter: FunctionComponent<Props> = ({ note, application,
     [canBeConvertedAsIs, closeDialog, confirmConvert, convertAsIs],
   )
 
-  const lineHeight = usePreference(PrefKey.EditorLineHeight)
-  const fontSize = usePreference(PrefKey.EditorFontSize)
+  const [lineHeight] = useLocalPreference(LocalPrefKey.EditorLineHeight)
+  const [fontSize] = useLocalPreference(LocalPrefKey.EditorFontSize)
   const responsiveFontSize = useResponsiveEditorFontSize(fontSize, false)
 
   if (isSeamlessConvert) {

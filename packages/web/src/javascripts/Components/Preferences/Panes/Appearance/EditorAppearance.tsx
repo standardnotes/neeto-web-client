@@ -3,32 +3,23 @@ import Dropdown from '@/Components/Dropdown/Dropdown'
 import Icon from '@/Components/Icon/Icon'
 import HorizontalSeparator from '@/Components/Shared/HorizontalSeparator'
 import Switch from '@/Components/Switch/Switch'
-import {
-  ApplicationEvent,
-  EditorFontSize,
-  EditorLineHeight,
-  EditorLineWidth,
-  PrefKey,
-  PrefDefaults,
-} from '@standardnotes/snjs'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { EditorFontSize, EditorLineHeight, EditorLineWidth, LocalPrefKey } from '@standardnotes/snjs'
+import { useCallback, useMemo } from 'react'
 import { Subtitle, Title, Text } from '../../PreferencesComponents/Content'
 import PreferencesGroup from '../../PreferencesComponents/PreferencesGroup'
 import PreferencesSegment from '../../PreferencesComponents/PreferencesSegment'
 import { CHANGE_EDITOR_WIDTH_COMMAND } from '@standardnotes/ui-services'
+import { useLocalPreference } from '../../../../Hooks/usePreference'
 
 type Props = {
   application: WebApplication
 }
 
 const EditorDefaults = ({ application }: Props) => {
-  const [lineHeight, setLineHeight] = useState(() =>
-    application.getPreference(PrefKey.EditorLineHeight, PrefDefaults[PrefKey.EditorLineHeight]),
-  )
+  const [lineHeight, setLineHeight] = useLocalPreference(LocalPrefKey.EditorLineHeight)
 
   const handleLineHeightChange = (value: string) => {
     setLineHeight(value as EditorLineHeight)
-    void application.setPreference(PrefKey.EditorLineHeight, value as EditorLineHeight)
   }
 
   const lineHeightDropdownOptions = useMemo(
@@ -40,22 +31,14 @@ const EditorDefaults = ({ application }: Props) => {
     [],
   )
 
-  const [monospaceFont, setMonospaceFont] = useState(() =>
-    application.getPreference(PrefKey.EditorMonospaceEnabled, PrefDefaults[PrefKey.EditorMonospaceEnabled]),
-  )
-
+  const [monospaceFont, setMonospaceFont] = useLocalPreference(LocalPrefKey.EditorMonospaceEnabled)
   const toggleMonospaceFont = () => {
     setMonospaceFont(!monospaceFont)
-    application.setPreference(PrefKey.EditorMonospaceEnabled, !monospaceFont).catch(console.error)
   }
 
-  const [fontSize, setFontSize] = useState(() =>
-    application.getPreference(PrefKey.EditorFontSize, PrefDefaults[PrefKey.EditorFontSize]),
-  )
-
+  const [fontSize, setFontSize] = useLocalPreference(LocalPrefKey.EditorFontSize)
   const handleFontSizeChange = (value: string) => {
     setFontSize(value as EditorFontSize)
-    void application.setPreference(PrefKey.EditorFontSize, value as EditorFontSize)
   }
 
   const fontSizeDropdownOptions = useMemo(
@@ -67,19 +50,11 @@ const EditorDefaults = ({ application }: Props) => {
     [],
   )
 
-  const [editorWidth, setEditorWidth] = useState(() =>
-    application.getPreference(PrefKey.EditorLineWidth, PrefDefaults[PrefKey.EditorLineWidth]),
-  )
+  const [editorWidth] = useLocalPreference(LocalPrefKey.EditorLineWidth)
 
   const toggleEditorWidthModal = useCallback(() => {
     application.keyboardService.triggerCommand(CHANGE_EDITOR_WIDTH_COMMAND, true)
   }, [application.keyboardService])
-
-  useEffect(() => {
-    return application.addSingleEventObserver(ApplicationEvent.PreferencesChanged, async () => {
-      setEditorWidth(application.getPreference(PrefKey.EditorLineWidth, PrefDefaults[PrefKey.EditorLineWidth]))
-    })
-  }, [application])
 
   return (
     <PreferencesGroup>

@@ -289,7 +289,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  cocoapods (~> 1.14.3)
+  activesupport (>= 6.1.7.5, != 7.1.0)
+  cocoapods (>= 1.13, != 1.15.1, != 1.15.0)
   fastlane
   fastlane-plugin-bundletool
   xcode-install

@@ -32,6 +32,10 @@ const LinkViewer = ({ isMobile, editor, linkNode, setIsEditingLink }: Props) => 
     return [linkUrl, isAutoLink]
   }, [editor, linkNode])
 
+  const linkNodeDOM = useMemo(() => {
+    return editor.getElementByKey(linkNode.getKey())
+  }, [editor, linkNode])
+
   const rangeRect = useRef<DOMRect>()
   const updateLinkEditorPosition = useCallback(() => {
     if (isMobile) {
@@ -58,13 +62,18 @@ const LinkViewer = ({ isMobile, editor, linkNode, setIsEditingLink }: Props) => 
       return
     }
 
+    if (!linkNodeDOM) {
+      return
+    }
+
     const linkEditorRect = linkEditorElement.getBoundingClientRect()
     const rootElementRect = rootElement.getBoundingClientRect()
+    const linkNodeRect = linkNodeDOM.getBoundingClientRect()
 
     const calculatedStyles = getPositionedPopoverStyles({
       align: 'center',
       side: 'top',
-      anchorRect: rangeRect.current,
+      anchorRect: linkNodeRect,
       popoverRect: linkEditorRect,
       documentRect: rootElementRect,
       offset: 12,
@@ -77,7 +86,7 @@ const LinkViewer = ({ isMobile, editor, linkNode, setIsEditingLink }: Props) => 
       })
       linkEditorElement.style.opacity = '1'
     }
-  }, [editor, isMobile])
+  }, [editor, isMobile, linkNodeDOM])
 
   useElementResize(linkViewerRef.current, updateLinkEditorPosition)
 

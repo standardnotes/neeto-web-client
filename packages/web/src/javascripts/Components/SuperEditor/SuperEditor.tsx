@@ -1,12 +1,12 @@
 import { WebApplication } from '@/Application/WebApplication'
 import {
   isPayloadSourceRetrieved,
-  PrefKey,
   NativeFeatureIdentifier,
   FeatureStatus,
   GetSuperNoteFeature,
   EditorLineHeightValues,
   WebAppEvent,
+  LocalPrefKey,
 } from '@standardnotes/snjs'
 import { CSSProperties, FocusEvent, FunctionComponent, useCallback, useEffect, useRef, useState } from 'react'
 import { BlocksEditor } from './BlocksEditor'
@@ -36,7 +36,7 @@ import ReadonlyPlugin from './Plugins/ReadonlyPlugin/ReadonlyPlugin'
 import ModalOverlay from '@/Components/Modal/ModalOverlay'
 import NotEntitledBanner from '../ComponentView/NotEntitledBanner'
 import AutoFocusPlugin from './Plugins/AutoFocusPlugin'
-import usePreference from '@/Hooks/usePreference'
+import { useLocalPreference } from '@/Hooks/usePreference'
 import BlockPickerMenuPlugin from './Plugins/BlockPickerPlugin/BlockPickerPlugin'
 import { EditorEventSource } from '@/Types/EditorEventSource'
 import { ElementIds } from '@/Constants/ElementIDs'
@@ -194,8 +194,8 @@ export const SuperEditor: FunctionComponent<Props> = ({
     return disposer
   }, [controller, controller.item.uuid])
 
-  const lineHeight = usePreference(PrefKey.EditorLineHeight)
-  const fontSize = usePreference(PrefKey.EditorFontSize)
+  const [lineHeight] = useLocalPreference(LocalPrefKey.EditorLineHeight)
+  const [fontSize] = useLocalPreference(LocalPrefKey.EditorFontSize)
   const responsiveFontSize = useResponsiveEditorFontSize(fontSize, false)
 
   const ref = useRef<HTMLDivElement>(null)

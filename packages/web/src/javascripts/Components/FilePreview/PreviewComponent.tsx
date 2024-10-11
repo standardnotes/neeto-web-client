@@ -8,8 +8,7 @@ import ImagePreview from './ImagePreview'
 import { ImageZoomLevelProps } from './ImageZoomLevelProps'
 import { PreviewableTextFileTypes, RequiresNativeFilePreview } from './isFilePreviewable'
 import TextPreview from './TextPreview'
-import { parseFileName } from '@standardnotes/filepicker'
-import { sanitizeFileName } from '@standardnotes/ui-services'
+import { parseFileName, sanitizeFileName } from '@standardnotes/utils'
 import VideoPreview from './VideoPreview'
 
 type Props = {
@@ -90,7 +89,14 @@ const PreviewComponent: FunctionComponent<Props> = ({
   }
 
   if (file.mimeType.startsWith('video/')) {
-    return <VideoPreview file={file} filesController={application.filesController} objectUrl={objectUrl} />
+    return (
+      <VideoPreview
+        file={file}
+        filesController={application.filesController}
+        objectUrl={objectUrl}
+        isEmbeddedInSuper={isEmbeddedInSuper}
+      />
+    )
   }
 
   if (file.mimeType.startsWith('audio/')) {

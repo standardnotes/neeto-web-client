@@ -313,6 +313,8 @@ const ToolbarPlugin = () => {
     }
 
     const anchorNode = selection.anchor.getNode()
+    const focusNode = selection.focus.getNode()
+    const isAnchorSameAsFocus = anchorNode === focusNode
     let element =
       anchorNode.getKey() === 'root'
         ? anchorNode
@@ -342,9 +344,9 @@ const ToolbarPlugin = () => {
     const node = getSelectedNode(selection)
     const parent = node.getParent()
     setIsEditingLink(false)
-    if ($isLinkNode(node)) {
+    if ($isLinkNode(node) && isAnchorSameAsFocus) {
       setLinkNode(node)
-    } else if ($isLinkNode(parent)) {
+    } else if ($isLinkNode(parent) && isAnchorSameAsFocus) {
       setLinkNode(parent)
     } else {
       setLinkNode(null)

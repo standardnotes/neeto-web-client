@@ -18,6 +18,7 @@ import { $createFileExportNode } from '../Lexical/Nodes/FileExportNode'
 import { $createInlineFileNode } from '../Plugins/InlineFilePlugin/InlineFileNode'
 import { $convertFromMarkdownString } from '../Lexical/Utils/MarkdownImport'
 import { $convertToMarkdownString } from '../Lexical/Utils/MarkdownExport'
+import { parseFileName } from '@standardnotes/utils'
 
 export class HeadlessSuperConverter implements SuperConverterServiceInterface {
   private importEditor: LexicalEditor
@@ -90,6 +91,7 @@ export class HeadlessSuperConverter implements SuperConverterServiceInterface {
             return
           }
           const fileNodes = $nodesOfType(FileNode)
+          const filenameCounts: Record<string, number> = {}
           Promise.all(
             fileNodes.map(async (fileNode) => {
               const fileItem = getFileItem(fileNode.getId())
@@ -112,7 +114,17 @@ export class HeadlessSuperConverter implements SuperConverterServiceInterface {
               } else {
                 this.exportEditor.update(
                   () => {
-                    const fileExportNode = $createFileExportNode(fileItem.name, fileItem.mimeType)
+                    filenameCounts[fileItem.name] =
+                      filenameCounts[fileItem.name] == undefined ? 0 : filenameCounts[fileItem.name] + 1
+
+                    let name = fileItem.name
+
+                    if (filenameCounts[name] > 0) {
+                      const { name: _name, ext } = parseFileName(name)
+                      name = `${_name}-${fileItem.uuid}.${ext}`
+                    }
+
+                    const fileExportNode = $createFileExportNode(name, fileItem.mimeType)
                     fileNode.replace(fileExportNode)
                   },
                   { discrete: true },

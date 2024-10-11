@@ -3,6 +3,116 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.195.8](https://github.com/standardnotes/app/compare/@standardnotes/web@3.195.7...@standardnotes/web@3.195.8) (2024-10-03)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.195.7](https://github.com/standardnotes/app/compare/@standardnotes/web@3.195.6...@standardnotes/web@3.195.7) (2024-10-03)
+
+### Reverts
+
+* Revert "chore: update play billing version to fix android build [skip e2e]" ([3796df5](https://github.com/standardnotes/app/commit/3796df5159282b78f4a59f22451cc7ca1136d862))
+
+## [3.195.6](https://github.com/standardnotes/app/compare/@standardnotes/web@3.195.5...@standardnotes/web@3.195.6) (2024-09-28)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.195.5](https://github.com/standardnotes/app/compare/@standardnotes/web@3.195.4...@standardnotes/web@3.195.5) (2024-09-26)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.195.4](https://github.com/standardnotes/app/compare/@standardnotes/web@3.195.3...@standardnotes/web@3.195.4) (2024-09-20)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.195.3](https://github.com/standardnotes/app/compare/@standardnotes/web@3.195.2...@standardnotes/web@3.195.3) (2024-09-14)
+
+### Bug Fixes
+
+* Fixed issue with embedded note links getting deselected after first click ([48b558b](https://github.com/standardnotes/app/commit/48b558bb5dd5254673b7e21df32c1aa35836ed3e))
+
+## [3.195.2](https://github.com/standardnotes/app/compare/@standardnotes/web@3.195.1...@standardnotes/web@3.195.2) (2024-09-09)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.195.1](https://github.com/standardnotes/app/compare/@standardnotes/web@3.195.0...@standardnotes/web@3.195.1) (2024-07-17)
+
+**Note:** Version bump only for package @standardnotes/web
+
+# [3.195.0](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.13...@standardnotes/web@3.195.0) (2024-07-14)
+
+### Features
+
+* Added keyboard shortcut to toggle checklist item and fixed issue with pressing Space inside checklist toggling it ([e807c9d](https://github.com/standardnotes/app/commit/e807c9d5584c6320f728b8b34e60bcb8eefd921e))
+
+## [3.194.13](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.12...@standardnotes/web@3.194.13) (2024-07-04)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.194.12](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.11...@standardnotes/web@3.194.12) (2024-07-03)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.194.11](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.10...@standardnotes/web@3.194.11) (2024-06-22)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.194.10](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.9...@standardnotes/web@3.194.10) (2024-06-21)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.194.9](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.8...@standardnotes/web@3.194.9) (2024-06-05)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.194.8](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.7...@standardnotes/web@3.194.8) (2024-06-05)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.194.7](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.6...@standardnotes/web@3.194.7) (2024-05-22)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.194.6](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.5...@standardnotes/web@3.194.6) (2024-05-14)
+
+### Reverts
+
+* Revert "chore: upgrade lexical version & patches [skip e2e]" ([e784300](https://github.com/standardnotes/app/commit/e7843005e2354ec1257e08d051ee2a7407dad678))
+
+## [3.194.5](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.4...@standardnotes/web@3.194.5) (2024-05-12)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.194.4](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.3...@standardnotes/web@3.194.4) (2024-05-07)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.194.3](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.2...@standardnotes/web@3.194.3) (2024-05-06)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.194.2](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.1...@standardnotes/web@3.194.2) (2024-05-04)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.194.1](https://github.com/standardnotes/app/compare/@standardnotes/web@3.194.0...@standardnotes/web@3.194.1) (2024-05-03)
+
+**Note:** Version bump only for package @standardnotes/web
+
+# [3.194.0](https://github.com/standardnotes/app/compare/@standardnotes/web@3.193.10...@standardnotes/web@3.194.0) (2024-04-24)
+
+### Features
+
+* Switched editor appearance preferences to be local instead of synced ([#2870](https://github.com/standardnotes/app/issues/2870)) ([594a606](https://github.com/standardnotes/app/commit/594a6061b2af619c5f585d6327fd4c3f20dac740))
+
+## [3.193.10](https://github.com/standardnotes/app/compare/@standardnotes/web@3.193.9...@standardnotes/web@3.193.10) (2024-04-22)
+
+**Note:** Version bump only for package @standardnotes/web
+
+## [3.193.9](https://github.com/standardnotes/app/compare/@standardnotes/web@3.193.8...@standardnotes/web@3.193.9) (2024-04-21)
+
+**Note:** Version bump only for package @standardnotes/web
+
 ## [3.193.8](https://github.com/standardnotes/app/compare/@standardnotes/web@3.193.7...@standardnotes/web@3.193.8) (2024-04-20)
 
 **Note:** Version bump only for package @standardnotes/web

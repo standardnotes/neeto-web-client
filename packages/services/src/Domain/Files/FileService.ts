@@ -17,6 +17,12 @@ import {
   isEncryptedPayload,
   VaultListingInterface,
   SharedVaultListingInterface,
+  DecryptedPayload,
+  FillItemContent,
+  PayloadVaultOverrides,
+  PayloadTimestampDefaults,
+  CreateItemFromPayload,
+  DecryptedItemInterface,
 } from '@standardnotes/models'
 import { PureCryptoInterface } from '@standardnotes/sncrypto-common'
 import { LoggerInterface, spaceSeparatedStrings, UuidGenerator } from '@standardnotes/utils'
@@ -246,6 +252,7 @@ export class FileService extends AbstractService implements FilesClientInterface
   public async finishUpload(
     operation: EncryptAndUploadFileOperation,
     fileMetadata: FileMetadata,
+    uuid: string,
   ): Promise<FileItem | ClientDisplayableError> {
     const uploadSessionClosed = await this.api.closeUploadSession(
       operation.getValetToken(),
@@ -268,16 +275,22 @@ export class FileService extends AbstractService implements FilesClientInterface
       remoteIdentifier: result.remoteIdentifier,
     }
 
-    const file = await this.mutator.createItem<FileItem>(
-      ContentType.TYPES.File,
-      FillItemContentSpecialized(fileContent),
-      true,
-      operation.vault,
-    )
+    const filePayload = new DecryptedPayload<FileContent>({
+      uuid,
+      content_type: ContentType.TYPES.File,
+      content: FillItemContent<FileContent>(FillItemContentSpecialized(fileContent)),
+      dirty: true,
+      ...PayloadVaultOverrides(operation.vault),
+      ...PayloadTimestampDefaults(),
+    })
+
+    const fileItem = CreateItemFromPayload(filePayload) as DecryptedItemInterface<FileContent>
+
+    const insertedItem = await this.mutator.insertItem<FileItem>(fileItem)
 
     await this.sync.sync()
 
-    return file
+    return insertedItem
   }
 
   private async decryptCachedEntry(file: FileItem, entry: EncryptedBytes): Promise<DecryptedBytes> {

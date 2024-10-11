@@ -21,7 +21,7 @@ Standard Notes is an end-to-end encrypted note-taking app for digitalists and pr
 	- [Mac](https://standardnotes.com/download)
 	- [Windows](https://standardnotes.com/download)
 	- [Linux](https://standardnotes.com/download)
-	- [iOS](https://standardnotes.com/download/https://itunes.apple.com/us/app/standard-notes/id1285392450?mt=8)
+	- [iOS](https://itunes.apple.com/us/app/standard-notes/id1285392450?mt=8)
 	- [Android](https://play.google.com/store/apps/details?id=com.standardnotes)
 4. You're all set. Standard Notes comes out of the box with end-to-end encrypted sync on all your devices.
 

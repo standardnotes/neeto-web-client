@@ -1,0 +1,151 @@
+diff --git a/LexicalClipboard.dev.js b/LexicalClipboard.dev.js
+index 3fad3811aa254c5b1b02e039c0d1f21c2a28562f..78aa3bc5048bb4354339efc558031ec0185163dd 100644
+--- a/LexicalClipboard.dev.js
++++ b/LexicalClipboard.dev.js
+@@ -30,7 +30,6 @@ const CAN_USE_DOM = typeof window !== 'undefined' && typeof window.document !==
+  * LICENSE file in the root directory of this source tree.
+  *
+  */
+-
+ const getDOMSelection = targetWindow => CAN_USE_DOM ? (targetWindow || window).getSelection() : null;
+ 
+ /**
+@@ -105,7 +104,7 @@ function $insertDataTransferForPlainText(dataTransfer, selection) {
+  * @param selection the selection to use as the insertion point for the content in the DataTransfer object
+  * @param editor the LexicalEditor the content is being inserted into.
+  */
+-function $insertDataTransferForRichText(dataTransfer, selection, editor) {
++function $insertDataTransferForRichText(dataTransfer, selection, editor, event) {
+   const lexicalString = dataTransfer.getData('application/x-lexical-editor');
+   if (lexicalString) {
+     try {
+@@ -118,15 +117,18 @@ function $insertDataTransferForRichText(dataTransfer, selection, editor) {
+       // Fail silently.
+     }
+   }
+-  const htmlString = dataTransfer.getData('text/html');
+-  if (htmlString) {
+-    try {
+-      const parser = new DOMParser();
+-      const dom = parser.parseFromString(htmlString, 'text/html');
+-      const nodes = html.$generateNodesFromDOM(editor, dom);
+-      return $insertGeneratedNodes(editor, nodes, selection);
+-    } catch (_unused2) {
+-      // Fail silently.
++  const shouldIgnoreHTML = event && event.inputType === 'insertReplacementText' && dataTransfer.types.includes('text/plain');
++  if (!shouldIgnoreHTML) {
++    const htmlString = dataTransfer.getData('text/html');
++    if (htmlString) {
++      try {
++        const parser = new DOMParser();
++        const dom = parser.parseFromString(htmlString, 'text/html');
++        const nodes = html.$generateNodesFromDOM(editor, dom);
++        return $insertGeneratedNodes(editor, nodes, selection);
++      } catch (_unused2) {
++        // Fail silently.
++      }
+     }
+   }
+ 
+diff --git a/LexicalClipboard.dev.mjs b/LexicalClipboard.dev.mjs
+index 9d1054125804bec18b6d2fc3b09386defa7c8be2..ef944d097da9cc4383c38c874a6d1e7c20ab22d0 100644
+--- a/LexicalClipboard.dev.mjs
++++ b/LexicalClipboard.dev.mjs
+@@ -28,7 +28,6 @@ const CAN_USE_DOM = typeof window !== 'undefined' && typeof window.document !==
+  * LICENSE file in the root directory of this source tree.
+  *
+  */
+-
+ const getDOMSelection = targetWindow => CAN_USE_DOM ? (targetWindow || window).getSelection() : null;
+ 
+ /**
+@@ -103,7 +102,7 @@ function $insertDataTransferForPlainText(dataTransfer, selection) {
+  * @param selection the selection to use as the insertion point for the content in the DataTransfer object
+  * @param editor the LexicalEditor the content is being inserted into.
+  */
+-function $insertDataTransferForRichText(dataTransfer, selection, editor) {
++function $insertDataTransferForRichText(dataTransfer, selection, editor, event) {
+   const lexicalString = dataTransfer.getData('application/x-lexical-editor');
+   if (lexicalString) {
+     try {
+@@ -116,15 +115,18 @@ function $insertDataTransferForRichText(dataTransfer, selection, editor) {
+       // Fail silently.
+     }
+   }
+-  const htmlString = dataTransfer.getData('text/html');
+-  if (htmlString) {
+-    try {
+-      const parser = new DOMParser();
+-      const dom = parser.parseFromString(htmlString, 'text/html');
+-      const nodes = $generateNodesFromDOM(editor, dom);
+-      return $insertGeneratedNodes(editor, nodes, selection);
+-    } catch (_unused2) {
+-      // Fail silently.
++  const shouldIgnoreHTML = event && event.inputType === 'insertReplacementText' && dataTransfer.types.includes('text/plain');
++  if (!shouldIgnoreHTML) {
++    const htmlString = dataTransfer.getData('text/html');
++    if (htmlString) {
++      try {
++        const parser = new DOMParser();
++        const dom = parser.parseFromString(htmlString, 'text/html');
++        const nodes = $generateNodesFromDOM(editor, dom);
++        return $insertGeneratedNodes(editor, nodes, selection);
++      } catch (_unused2) {
++        // Fail silently.
++      }
+     }
+   }
+ 
+diff --git a/LexicalClipboard.prod.js b/LexicalClipboard.prod.js
+index 38848b4d69dcae7d54a5ab99b8f3cdd9324e413f..7ddc6b87dd2c9c32973f4dc7ae552c8fdb80eeb0 100644
+--- a/LexicalClipboard.prod.js
++++ b/LexicalClipboard.prod.js
+@@ -6,14 +6,14 @@
+  *
+  */
+ 
+-'use strict';var f=require("@lexical/html"),m=require("@lexical/selection"),n=require("@lexical/utils"),p=require("lexical"),t;function u(a){let b=new URLSearchParams;b.append("code",a);for(let c=1;c<arguments.length;c++)b.append("v",arguments[c]);throw Error(`Minified Lexical error #${a}; visit https://lexical.dev/docs/error?${b} for the full message or `+"use the non-minified dev environment for full errors and additional helpful warnings.");}
+-t=u&&u.__esModule&&Object.prototype.hasOwnProperty.call(u,"default")?u["default"]:u;let v="undefined"!==typeof window&&"undefined"!==typeof window.document&&"undefined"!==typeof window.document.createElement;function w(a){let b=p.$getSelection();null==b&&t(166);return p.$isRangeSelection(b)&&b.isCollapsed()||0===b.getNodes().length?"":f.$generateHtmlFromNodes(a,b)}
+-function x(a){let b=p.$getSelection();null==b&&t(166);return p.$isRangeSelection(b)&&b.isCollapsed()||0===b.getNodes().length?null:JSON.stringify(y(a,b))}function z(a,b,c){a.dispatchCommand(p.SELECTION_INSERT_CLIPBOARD_NODES_COMMAND,{nodes:b,selection:c})||c.insertNodes(b)}
+-function A(a,b,c,d=[]){let e=null!==b?c.isSelected(b):!0,h=p.$isElementNode(c)&&c.excludeFromCopy("html");var g=c;if(null!==b){var k=m.$cloneWithProperties(c);g=k=p.$isTextNode(k)&&null!==b?m.$sliceSelectedTextNodeContent(b,k):k}let q=p.$isElementNode(g)?g.getChildren():[];var l=g;k=l.exportJSON();var r=l.constructor;k.type!==r.getType()&&t(58,r.name);p.$isElementNode(l)&&(Array.isArray(k.children)||t(59,r.name));p.$isTextNode(g)&&(g=g.__text,0<g.length?k.text=g:e=!1);for(g=0;g<q.length;g++)l=q[g],
+-r=A(a,b,l,k.children),!e&&p.$isElementNode(c)&&r&&c.extractWithChild(l,b,"clone")&&(e=!0);if(e&&!h)d.push(k);else if(Array.isArray(k.children))for(a=0;a<k.children.length;a++)d.push(k.children[a]);return e}function y(a,b){let c=[],d=p.$getRoot().getChildren();for(let e=0;e<d.length;e++)A(a,b,d[e],c);return{namespace:a._config.namespace,nodes:c}}function B(a){let b=[];for(let c=0;c<a.length;c++){let d=p.$parseSerializedNode(a[c]);p.$isTextNode(d)&&m.$addNodeStyle(d);b.push(d)}return b}let C=null;
+-function D(a,b){var c=v?(a._window||window).getSelection():null;if(!c)return!1;var d=c.anchorNode;c=c.focusNode;if(null!==d&&null!==c&&!p.isSelectionWithinEditor(a,d,c))return!1;b.preventDefault();b=b.clipboardData;d=p.$getSelection();if(null===b||null===d)return!1;c=w(a);a=x(a);let e="";null!==d&&(e=d.getTextContent());null!==c&&b.setData("text/html",c);null!==a&&b.setData("application/x-lexical-editor",a);b.setData("text/plain",e);return!0}exports.$generateJSONFromSelectedNodes=y;
+-exports.$generateNodesFromSerializedNodes=B;exports.$getHtmlContent=w;exports.$getLexicalContent=x;exports.$insertDataTransferForPlainText=function(a,b){a=a.getData("text/plain")||a.getData("text/uri-list");null!=a&&b.insertRawText(a)};
+-exports.$insertDataTransferForRichText=function(a,b,c){var d=a.getData("application/x-lexical-editor");if(d)try{let h=JSON.parse(d);if(h.namespace===c._config.namespace&&Array.isArray(h.nodes)){let g=B(h.nodes);return z(c,g,b)}}catch(h){}if(d=a.getData("text/html"))try{var e=(new DOMParser).parseFromString(d,"text/html");let h=f.$generateNodesFromDOM(c,e);return z(c,h,b)}catch(h){}a=a.getData("text/plain")||a.getData("text/uri-list");if(null!=a)if(p.$isRangeSelection(b))for(b=a.split(/(\r?\n|\t)/),
+-""===b[b.length-1]&&b.pop(),a=0;a<b.length;a++)c=p.$getSelection(),p.$isRangeSelection(c)&&(e=b[a],"\n"===e||"\r\n"===e?c.insertParagraph():"\t"===e?c.insertNodes([p.$createTabNode()]):c.insertText(e));else b.insertRawText(a)};exports.$insertGeneratedNodes=z;
+-exports.copyToClipboard=async function(a,b){if(null!==C)return!1;if(null!==b)return new Promise(g=>{a.update(()=>{g(D(a,b))})});var c=a.getRootElement();let d=null==a._window?window.document:a._window.document,e=v?(a._window||window).getSelection():null;if(null===c||null===e)return!1;let h=d.createElement("span");h.style.cssText="position: fixed; top: -1000px;";h.append(d.createTextNode("#"));c.append(h);c=new Range;c.setStart(h,0);c.setEnd(h,1);e.removeAllRanges();e.addRange(c);return new Promise(g=>
+-{let k=a.registerCommand(p.COPY_COMMAND,q=>{n.objectKlassEquals(q,ClipboardEvent)&&(k(),null!==C&&(window.clearTimeout(C),C=null),g(D(a,q)));return!0},p.COMMAND_PRIORITY_CRITICAL);C=window.setTimeout(()=>{k();C=null;g(!1)},50);d.execCommand("copy");h.remove()})}
++'use strict';var f=require("@lexical/html"),m=require("@lexical/selection"),q=require("@lexical/utils"),r=require("lexical");function t(a){let b=new URLSearchParams;b.append("code",a);for(let c=1;c<arguments.length;c++)b.append("v",arguments[c]);throw Error(`Minified Lexical error #${a}; visit https://lexical.dev/docs/error?${b} for the full message or `+"use the non-minified dev environment for full errors and additional helpful warnings.");}
++let u="undefined"!==typeof window&&"undefined"!==typeof window.document&&"undefined"!==typeof window.document.createElement;function v(a){let b=r.$getSelection();null==b&&t(166);return r.$isRangeSelection(b)&&b.isCollapsed()||0===b.getNodes().length?"":f.$generateHtmlFromNodes(a,b)}function w(a){let b=r.$getSelection();null==b&&t(166);return r.$isRangeSelection(b)&&b.isCollapsed()||0===b.getNodes().length?null:JSON.stringify(x(a,b))}
++function y(a,b,c){a.dispatchCommand(r.SELECTION_INSERT_CLIPBOARD_NODES_COMMAND,{nodes:b,selection:c})||c.insertNodes(b)}
++function z(a,b,c,e=[]){let g=null!==b?c.isSelected(b):!0,k=r.$isElementNode(c)&&c.excludeFromCopy("html");var d=c;if(null!==b){var h=m.$cloneWithProperties(c);d=h=r.$isTextNode(h)&&null!==b?m.$sliceSelectedTextNodeContent(b,h):h}let n=r.$isElementNode(d)?d.getChildren():[];var l=d;h=l.exportJSON();var p=l.constructor;h.type!==p.getType()&&t(58,p.name);r.$isElementNode(l)&&(Array.isArray(h.children)||t(59,p.name));r.$isTextNode(d)&&(d=d.__text,0<d.length?h.text=d:g=!1);for(d=0;d<n.length;d++)l=n[d],
++p=z(a,b,l,h.children),!g&&r.$isElementNode(c)&&p&&c.extractWithChild(l,b,"clone")&&(g=!0);if(g&&!k)e.push(h);else if(Array.isArray(h.children))for(a=0;a<h.children.length;a++)e.push(h.children[a]);return g}function x(a,b){let c=[],e=r.$getRoot().getChildren();for(let g=0;g<e.length;g++)z(a,b,e[g],c);return{namespace:a._config.namespace,nodes:c}}function A(a){let b=[];for(let c=0;c<a.length;c++){let e=r.$parseSerializedNode(a[c]);r.$isTextNode(e)&&m.$addNodeStyle(e);b.push(e)}return b}let B=null;
++function C(a,b){var c=u?(a._window||window).getSelection():null;if(!c)return!1;var e=c.anchorNode;c=c.focusNode;if(null!==e&&null!==c&&!r.isSelectionWithinEditor(a,e,c))return!1;b.preventDefault();b=b.clipboardData;e=r.$getSelection();if(null===b||null===e)return!1;c=v(a);a=w(a);let g="";null!==e&&(g=e.getTextContent());null!==c&&b.setData("text/html",c);null!==a&&b.setData("application/x-lexical-editor",a);b.setData("text/plain",g);return!0}exports.$generateJSONFromSelectedNodes=x;
++exports.$generateNodesFromSerializedNodes=A;exports.$getHtmlContent=v;exports.$getLexicalContent=w;exports.$insertDataTransferForPlainText=function(a,b){a=a.getData("text/plain")||a.getData("text/uri-list");null!=a&&b.insertRawText(a)};
++exports.$insertDataTransferForRichText=function(a,b,c,e){let g=a.getData("application/x-lexical-editor");if(g)try{let d=JSON.parse(g);if(d.namespace===c._config.namespace&&Array.isArray(d.nodes)){let h=A(d.nodes);return y(c,h,b)}}catch(d){}if(!e||"insertReplacementText"!==e.inputType||!a.types.includes("text/plain"))if(e=a.getData("text/html"))try{var k=(new DOMParser).parseFromString(e,"text/html");let d=f.$generateNodesFromDOM(c,k);return y(c,d,b)}catch(d){}a=a.getData("text/plain")||a.getData("text/uri-list");
++if(null!=a)if(r.$isRangeSelection(b))for(b=a.split(/(\r?\n|\t)/),""===b[b.length-1]&&b.pop(),a=0;a<b.length;a++)c=r.$getSelection(),r.$isRangeSelection(c)&&(k=b[a],"\n"===k||"\r\n"===k?c.insertParagraph():"\t"===k?c.insertNodes([r.$createTabNode()]):c.insertText(k));else b.insertRawText(a)};exports.$insertGeneratedNodes=y;
++exports.copyToClipboard=async function(a,b){if(null!==B)return!1;if(null!==b)return new Promise(d=>{a.update(()=>{d(C(a,b))})});var c=a.getRootElement();let e=null==a._window?window.document:a._window.document,g=u?(a._window||window).getSelection():null;if(null===c||null===g)return!1;let k=e.createElement("span");k.style.cssText="position: fixed; top: -1000px;";k.append(e.createTextNode("#"));c.append(k);c=new Range;c.setStart(k,0);c.setEnd(k,1);g.removeAllRanges();g.addRange(c);return new Promise(d=>
++{let h=a.registerCommand(r.COPY_COMMAND,n=>{q.objectKlassEquals(n,ClipboardEvent)&&(h(),null!==B&&(window.clearTimeout(B),B=null),d(C(a,n)));return!0},r.COMMAND_PRIORITY_CRITICAL);B=window.setTimeout(()=>{h();B=null;d(!1)},50);e.execCommand("copy");k.remove()})}
+diff --git a/LexicalClipboard.prod.mjs b/LexicalClipboard.prod.mjs
+index 6b572db295155b182e3077f64b308cbbf993e241..32076e8a14b02d37e0a8302e51920f13dc211180 100644
+--- a/LexicalClipboard.prod.mjs
++++ b/LexicalClipboard.prod.mjs
+@@ -6,4 +6,4 @@
+  *
+  */
+ 
+-import{$generateHtmlFromNodes as t,$generateNodesFromDOM as e}from"@lexical/html";import{$addNodeStyle as n,$cloneWithProperties as o,$sliceSelectedTextNodeContent as l}from"@lexical/selection";import{objectKlassEquals as r}from"@lexical/utils";import{$getSelection as i,$isRangeSelection as s,$createTabNode as a,SELECTION_INSERT_CLIPBOARD_NODES_COMMAND as c,$getRoot as u,$parseSerializedNode as d,$isTextNode as f,COPY_COMMAND as p,COMMAND_PRIORITY_CRITICAL as m,isSelectionWithinEditor as h,$isElementNode as g}from"lexical";function x(t){return t&&t.__esModule&&Object.prototype.hasOwnProperty.call(t,"default")?t.default:t}var w=x((function(t){const e=new URLSearchParams;e.append("code",t);for(let t=1;t<arguments.length;t++)e.append("v",arguments[t]);throw Error(`Minified Lexical error #${t}; visit https://lexical.dev/docs/error?${e} for the full message or use the non-minified dev environment for full errors and additional helpful warnings.`)}));const y="undefined"!=typeof window&&void 0!==window.document&&void 0!==window.document.createElement,v=t=>y?(t||window).getSelection():null;function D(e){const n=i();return null==n&&w(166),s(n)&&n.isCollapsed()||0===n.getNodes().length?"":t(e,n)}function C(t){const e=i();return null==e&&w(166),s(e)&&e.isCollapsed()||0===e.getNodes().length?null:JSON.stringify(A(t,e))}function N(t,e){const n=t.getData("text/plain")||t.getData("text/uri-list");null!=n&&e.insertRawText(n)}function _(t,n,o){const l=t.getData("application/x-lexical-editor");if(l)try{const t=JSON.parse(l);if(t.namespace===o._config.namespace&&Array.isArray(t.nodes)){return T(o,R(t.nodes),n)}}catch(t){}const r=t.getData("text/html");if(r)try{const t=(new DOMParser).parseFromString(r,"text/html");return T(o,e(o,t),n)}catch(t){}const c=t.getData("text/plain")||t.getData("text/uri-list");if(null!=c)if(s(n)){const t=c.split(/(\r?\n|\t)/);""===t[t.length-1]&&t.pop();for(let e=0;e<t.length;e++){const n=i();if(s(n)){const o=t[e];"\n"===o||"\r\n"===o?n.insertParagraph():"\t"===o?n.insertNodes([a()]):n.insertText(o)}}}else n.insertRawText(c)}function T(t,e,n){t.dispatchCommand(c,{nodes:e,selection:n})||n.insertNodes(e)}function S(t,e,n,r=[]){let i=null===e||n.isSelected(e);const s=g(n)&&n.excludeFromCopy("html");let a=n;if(null!==e){let t=o(n);t=f(t)&&null!==e?l(e,t):t,a=t}const c=g(a)?a.getChildren():[],u=function(t){const e=t.exportJSON(),n=t.constructor;if(e.type!==n.getType()&&w(58,n.name),g(t)){const t=e.children;Array.isArray(t)||w(59,n.name)}return e}(a);if(f(a)){const t=a.__text;t.length>0?u.text=t:i=!1}for(let o=0;o<c.length;o++){const l=c[o],r=S(t,e,l,u.children);!i&&g(n)&&r&&n.extractWithChild(l,e,"clone")&&(i=!0)}if(i&&!s)r.push(u);else if(Array.isArray(u.children))for(let t=0;t<u.children.length;t++){const e=u.children[t];r.push(e)}return i}function A(t,e){const n=[],o=u().getChildren();for(let l=0;l<o.length;l++){S(t,e,o[l],n)}return{namespace:t._config.namespace,nodes:n}}function R(t){const e=[];for(let o=0;o<t.length;o++){const l=t[o],r=d(l);f(r)&&n(r),e.push(r)}return e}let E=null;async function O(t,e){if(null!==E)return!1;if(null!==e)return new Promise(((n,o)=>{t.update((()=>{n(P(t,e))}))}));const n=t.getRootElement(),o=null==t._window?window.document:t._window.document,l=v(t._window);if(null===n||null===l)return!1;const i=o.createElement("span");i.style.cssText="position: fixed; top: -1000px;",i.append(o.createTextNode("#")),n.append(i);const s=new Range;return s.setStart(i,0),s.setEnd(i,1),l.removeAllRanges(),l.addRange(s),new Promise(((e,n)=>{const l=t.registerCommand(p,(n=>(r(n,ClipboardEvent)&&(l(),null!==E&&(window.clearTimeout(E),E=null),e(P(t,n))),!0)),m);E=window.setTimeout((()=>{l(),E=null,e(!1)}),50),o.execCommand("copy"),i.remove()}))}function P(t,e){const n=v(t._window);if(!n)return!1;const o=n.anchorNode,l=n.focusNode;if(null!==o&&null!==l&&!h(t,o,l))return!1;e.preventDefault();const r=e.clipboardData,s=i();if(null===r||null===s)return!1;const a=D(t),c=C(t);let u="";return null!==s&&(u=s.getTextContent()),null!==a&&r.setData("text/html",a),null!==c&&r.setData("application/x-lexical-editor",c),r.setData("text/plain",u),!0}export{A as $generateJSONFromSelectedNodes,R as $generateNodesFromSerializedNodes,D as $getHtmlContent,C as $getLexicalContent,N as $insertDataTransferForPlainText,_ as $insertDataTransferForRichText,T as $insertGeneratedNodes,O as copyToClipboard};
++import{$generateHtmlFromNodes as e,$generateNodesFromDOM as t}from"@lexical/html";import{$addNodeStyle as n,$cloneWithProperties as l,$sliceSelectedTextNodeContent as o}from"@lexical/selection";import{objectKlassEquals as r}from"@lexical/utils";import{$getSelection as i,$isRangeSelection as s,$createTabNode as a,SELECTION_INSERT_CLIPBOARD_NODES_COMMAND as c,$getRoot as u,$parseSerializedNode as d,$isTextNode as p,COPY_COMMAND as f,COMMAND_PRIORITY_CRITICAL as m,isSelectionWithinEditor as h,$isElementNode as g}from"lexical";var x=function(e){const t=new URLSearchParams;t.append("code",e);for(let e=1;e<arguments.length;e++)t.append("v",arguments[e]);throw Error(`Minified Lexical error #${e}; visit https://lexical.dev/docs/error?${t} for the full message or use the non-minified dev environment for full errors and additional helpful warnings.`)};const w="undefined"!=typeof window&&void 0!==window.document&&void 0!==window.document.createElement,y=e=>w?(e||window).getSelection():null;function v(t){const n=i();return null==n&&x(166),s(n)&&n.isCollapsed()||0===n.getNodes().length?"":e(t,n)}function D(e){const t=i();return null==t&&x(166),s(t)&&t.isCollapsed()||0===t.getNodes().length?null:JSON.stringify(S(e,t))}function C(e,t){const n=e.getData("text/plain")||e.getData("text/uri-list");null!=n&&t.insertRawText(n)}function T(e,n,l,o){const r=e.getData("application/x-lexical-editor");if(r)try{const e=JSON.parse(r);if(e.namespace===l._config.namespace&&Array.isArray(e.nodes)){return N(l,_(e.nodes),n)}}catch(e){}if(!(o&&"insertReplacementText"===o.inputType&&e.types.includes("text/plain"))){const o=e.getData("text/html");if(o)try{const e=(new DOMParser).parseFromString(o,"text/html");return N(l,t(l,e),n)}catch(e){}}const c=e.getData("text/plain")||e.getData("text/uri-list");if(null!=c)if(s(n)){const e=c.split(/(\r?\n|\t)/);""===e[e.length-1]&&e.pop();for(let t=0;t<e.length;t++){const n=i();if(s(n)){const l=e[t];"\n"===l||"\r\n"===l?n.insertParagraph():"\t"===l?n.insertNodes([a()]):n.insertText(l)}}}else n.insertRawText(c)}function N(e,t,n){e.dispatchCommand(c,{nodes:t,selection:n})||n.insertNodes(t)}function R(e,t,n,r=[]){let i=null===t||n.isSelected(t);const s=g(n)&&n.excludeFromCopy("html");let a=n;if(null!==t){let e=l(n);e=p(e)&&null!==t?o(t,e):e,a=e}const c=g(a)?a.getChildren():[],u=function(e){const t=e.exportJSON(),n=e.constructor;if(t.type!==n.getType()&&x(58,n.name),g(e)){const e=t.children;Array.isArray(e)||x(59,n.name)}return t}(a);if(p(a)){const e=a.__text;e.length>0?u.text=e:i=!1}for(let l=0;l<c.length;l++){const o=c[l],r=R(e,t,o,u.children);!i&&g(n)&&r&&n.extractWithChild(o,t,"clone")&&(i=!0)}if(i&&!s)r.push(u);else if(Array.isArray(u.children))for(let e=0;e<u.children.length;e++){const t=u.children[e];r.push(t)}return i}function S(e,t){const n=[],l=u().getChildren();for(let o=0;o<l.length;o++){R(e,t,l[o],n)}return{namespace:e._config.namespace,nodes:n}}function _(e){const t=[];for(let l=0;l<e.length;l++){const o=e[l],r=d(o);p(r)&&n(r),t.push(r)}return t}let A=null;async function E(e,t){if(null!==A)return!1;if(null!==t)return new Promise(((n,l)=>{e.update((()=>{n(P(e,t))}))}));const n=e.getRootElement(),l=null==e._window?window.document:e._window.document,o=y(e._window);if(null===n||null===o)return!1;const i=l.createElement("span");i.style.cssText="position: fixed; top: -1000px;",i.append(l.createTextNode("#")),n.append(i);const s=new Range;return s.setStart(i,0),s.setEnd(i,1),o.removeAllRanges(),o.addRange(s),new Promise(((t,n)=>{const o=e.registerCommand(f,(n=>(r(n,ClipboardEvent)&&(o(),null!==A&&(window.clearTimeout(A),A=null),t(P(e,n))),!0)),m);A=window.setTimeout((()=>{o(),A=null,t(!1)}),50),l.execCommand("copy"),i.remove()}))}function P(e,t){const n=y(e._window);if(!n)return!1;const l=n.anchorNode,o=n.focusNode;if(null!==l&&null!==o&&!h(e,l,o))return!1;t.preventDefault();const r=t.clipboardData,s=i();if(null===r||null===s)return!1;const a=v(e),c=D(e);let u="";return null!==s&&(u=s.getTextContent()),null!==a&&r.setData("text/html",a),null!==c&&r.setData("application/x-lexical-editor",c),r.setData("text/plain",u),!0}export{S as $generateJSONFromSelectedNodes,_ as $generateNodesFromSerializedNodes,v as $getHtmlContent,D as $getLexicalContent,C as $insertDataTransferForPlainText,T as $insertDataTransferForRichText,N as $insertGeneratedNodes,E as copyToClipboard};
+diff --git a/clipboard.d.ts b/clipboard.d.ts
+index 99e2138389b64d298a1330d7b354ba87d2e6f24e..83250a4c2049f94e08bfdfc757e03e8a85a08dd4 100644
+--- a/clipboard.d.ts
++++ b/clipboard.d.ts
+@@ -44,7 +44,7 @@ export declare function $insertDataTransferForPlainText(dataTransfer: DataTransf
+  * @param selection the selection to use as the insertion point for the content in the DataTransfer object
+  * @param editor the LexicalEditor the content is being inserted into.
+  */
+-export declare function $insertDataTransferForRichText(dataTransfer: DataTransfer, selection: BaseSelection, editor: LexicalEditor): void;
++export declare function $insertDataTransferForRichText(dataTransfer: DataTransfer, selection: BaseSelection, editor: LexicalEditor, event?: InputEvent): void;
+ /**
+  * Inserts Lexical nodes into the editor using different strategies depending on
+  * some simple selection-based heuristics. If you're looking for a generic way to

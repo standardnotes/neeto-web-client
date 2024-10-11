@@ -1,5 +1,5 @@
 import { SuperConverterServiceInterface } from '@standardnotes/files'
-import { parseFileName } from '@standardnotes/filepicker'
+import { parseFileName } from '@standardnotes/utils'
 import { Converter } from '../Converter'
 import { ConversionResult } from '../ConversionResult'
 

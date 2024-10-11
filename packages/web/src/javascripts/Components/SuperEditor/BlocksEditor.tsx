@@ -27,7 +27,6 @@ import { RemoveBrokenTablesPlugin } from './Plugins/TablePlugin'
 import TableActionMenuPlugin from './Plugins/TableCellActionMenuPlugin'
 import ToolbarPlugin from './Plugins/ToolbarPlugin/ToolbarPlugin'
 import { useMediaQuery, MutuallyExclusiveMediaQueryBreakpoints } from '@/Hooks/useMediaQuery'
-import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin'
 import RemoteImagePlugin from './Plugins/RemoteImagePlugin/RemoteImagePlugin'
 import CodeOptionsPlugin from './Plugins/CodeOptionsPlugin/CodeOptions'
 import { SuperSearchContextProvider } from './Plugins/SearchPlugin/Context'
@@ -35,6 +34,7 @@ import { SearchPlugin } from './Plugins/SearchPlugin/SearchPlugin'
 import AutoLinkPlugin from './Plugins/AutoLinkPlugin/AutoLinkPlugin'
 import DatetimePlugin from './Plugins/DateTimePlugin/DateTimePlugin'
 import PasswordPlugin from './Plugins/PasswordPlugin/PasswordPlugin'
+import { CheckListPlugin } from './Plugins/CheckListPlugin'
 
 type BlocksEditorProps = {
   onChange?: (value: string, preview: string) => void

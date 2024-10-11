@@ -57,6 +57,12 @@
   list-style-type: none;
   outline: none;
   vertical-align: middle;
+
+  &:focus,
+  &:focus-within {
+    outline: none;
+    box-shadow: none;
+  }
 }
 .Lexical__listItemChecked {
   text-decoration: line-through;
@@ -79,11 +85,6 @@
 .Lexical__listItemChecked[dir='rtl']:before {
   left: auto;
   right: 0;
-}
-.Lexical__listItemUnchecked:focus:before,
-.Lexical__listItemChecked:focus:before {
-  box-shadow: 0 0 0 2px #a6cdfe;
-  border-radius: 2px;
 }
 .Lexical__listItemUnchecked:before {
   border: 1px solid #999;

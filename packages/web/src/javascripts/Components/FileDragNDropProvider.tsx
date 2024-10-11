@@ -8,11 +8,21 @@ import { useMemo, useState, createContext, ReactNode, useRef, useCallback, useEf
 import Portal from './Portal/Portal'
 import { ElementIds } from '@/Constants/ElementIDs'
 
-type FileDragTargetData = {
+type FileDragTargetCommonData = {
   tooltipText: string
-  callback: (files: FileItem) => void
   note?: SNNote
 }
+
+type FileDragTargetCallbacks =
+  | {
+      callback: (files: FileItem) => void
+      handleFileUpload?: never
+    }
+  | {
+      handleFileUpload: (fileOrHandle: File | FileSystemFileHandle) => void
+      callback?: never
+    }
+type FileDragTargetData = FileDragTargetCommonData & FileDragTargetCallbacks
 
 type FileDnDContextData = {
   isDraggingFiles: boolean
@@ -203,6 +213,11 @@ const FileDragNDropProvider = ({ application, children }: Props) => {
 
           const dragTarget = closestDragTarget ? dragTargets.current.get(closestDragTarget) : undefined
 
+          if (dragTarget?.handleFileUpload) {
+            dragTarget.handleFileUpload(fileOrHandle)
+            return
+          }
+
           const uploadedFile = await application.filesController.uploadNewFile(fileOrHandle, {
             note: dragTarget?.note,
           })
@@ -211,7 +226,9 @@ const FileDragNDropProvider = ({ application, children }: Props) => {
             return
           }
 
-          dragTarget?.callback(uploadedFile)
+          if (dragTarget?.callback) {
+            dragTarget.callback(uploadedFile)
+          }
         })
 
         dragCounter.current = 0

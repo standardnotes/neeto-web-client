@@ -11,18 +11,12 @@ import {
   ArchiveManager,
   confirmDialog,
   IsNativeMobileWeb,
-  parseAndCreateZippableFileName,
   VaultDisplayServiceInterface,
 } from '@standardnotes/ui-services'
 import { Strings, StringUtils } from '@/Constants/Strings'
 import { concatenateUint8Arrays } from '@/Utils/ConcatenateUint8Arrays'
-import {
-  ClassicFileReader,
-  StreamingFileReader,
-  StreamingFileSaver,
-  ClassicFileSaver,
-  parseFileName,
-} from '@standardnotes/filepicker'
+import { ClassicFileReader, StreamingFileReader, StreamingFileSaver, ClassicFileSaver } from '@standardnotes/filepicker'
+import { parseAndCreateZippableFileName, parseFileName } from '@standardnotes/utils'
 import {
   AlertService,
   ChallengeReason,
@@ -38,6 +32,7 @@ import {
   ProtectionsClientInterface,
   SNNote,
   SyncServiceInterface,
+  UuidGenerator,
   VaultServiceInterface,
 } from '@standardnotes/snjs'
 import { addToast, dismissToast, ToastType, updateToast } from '@standardnotes/toast'
@@ -52,14 +47,22 @@ const NonMutatingFileActions = [FileItemActionType.DownloadFile, FileItemActionT
 
 type FileContextMenuLocation = { x: number; y: number }
 
-export type FilesControllerEventData = {
-  [FilesControllerEvent.FileUploadedToNote]: {
-    uuid: string
-  }
+export enum FilesControllerEvent {
+  FileUploadedToNote = 'FileUploadedToNote',
+  FileUploadFinished = 'FileUploadFinished',
+  UploadAndInsertFile = 'UploadAndInsertFile',
 }
 
-export enum FilesControllerEvent {
-  FileUploadedToNote,
+export type FilesControllerEventData = {
+  [FilesControllerEvent.FileUploadedToNote]?: {
+    uuid: string
+  }
+  [FilesControllerEvent.FileUploadFinished]?: {
+    uploadedFile: FileItem
+  }
+  [FilesControllerEvent.UploadAndInsertFile]?: {
+    fileOrHandle: File | FileSystemFileHandle
+  }
 }
 
 export class FilesController extends AbstractViewController<FilesControllerEvent, FilesControllerEventData> {
@@ -72,6 +75,14 @@ export class FilesController extends AbstractViewController<FilesControllerEvent
   shouldUseStreamingAPI = StreamingFileSaver.available()
   reader = this.shouldUseStreamingAPI ? StreamingFileReader : ClassicFileReader
   maxFileSize = this.reader.maximumFileSize()
+
+  uploadProgressMap: Map<
+    string,
+    {
+      file: File
+      progress: number
+    }
+  > = new Map()
 
   override deinit(): void {
     super.deinit()
@@ -111,6 +122,8 @@ export class FilesController extends AbstractViewController<FilesControllerEvent
       setShowFileContextMenu: action,
       setShowProtectedOverlay: action,
       setFileContextMenuLocation: action,
+
+      uploadProgressMap: observable,
     })
 
     this.disposers.push(
@@ -453,9 +466,11 @@ export class FilesController extends AbstractViewController<FilesControllerEvent
     options: {
       showToast?: boolean
       note?: SNNote
+      onUploadStart?: (fileUuid: string) => void
+      onUploadFinish?: () => void
     } = {},
   ): Promise<FileItem | undefined> {
-    const { showToast = true, note } = options
+    const { showToast = true, note, onUploadStart, onUploadFinish } = options
 
     let toastId: string | undefined
     let canShowProgressNotification = false
@@ -482,6 +497,17 @@ export class FilesController extends AbstractViewController<FilesControllerEvent
         return
       }
 
+      const uuid = UuidGenerator.GenerateUuid()
+
+      this.uploadProgressMap.set(uuid, {
+        file: fileToUpload,
+        progress: 0,
+      })
+
+      if (onUploadStart) {
+        onUploadStart(uuid)
+      }
+
       const vaultForNote = note ? this.vaults.getItemVault(note) : undefined
 
       const operation = await this.files.beginNewFileUpload(
@@ -498,6 +524,11 @@ export class FilesController extends AbstractViewController<FilesControllerEvent
       }
 
       const initialProgress = operation.getProgress().percentComplete
+
+      this.uploadProgressMap.set(uuid, {
+        file: fileToUpload,
+        progress: initialProgress,
+      })
 
       if (showToast) {
         if (this.mobileDevice && canShowProgressNotification) {
@@ -521,6 +552,10 @@ export class FilesController extends AbstractViewController<FilesControllerEvent
         await this.files.pushBytesForUpload(operation, data, index, isLast)
 
         const percentComplete = Math.round(operation.getProgress().percentComplete)
+        this.uploadProgressMap.set(uuid, {
+          file: fileToUpload,
+          progress: percentComplete,
+        })
         if (toastId) {
           if (this.mobileDevice && canShowProgressNotification) {
             await this.mobileDevice.displayNotification({
@@ -547,7 +582,7 @@ export class FilesController extends AbstractViewController<FilesControllerEvent
         fileResult.mimeType = await this.archiveService.getMimeType(ext)
       }
 
-      const uploadedFile = await this.files.finishUpload(operation, fileResult)
+      const uploadedFile = await this.files.finishUpload(operation, fileResult, uuid)
 
       if (uploadedFile instanceof ClientDisplayableError) {
         addToast({
@@ -556,6 +591,14 @@ export class FilesController extends AbstractViewController<FilesControllerEvent
         })
         throw new Error(uploadedFile.text)
       }
+
+      if (onUploadFinish) {
+        onUploadFinish()
+      }
+
+      this.notifyEvent(FilesControllerEvent.FileUploadFinished, {
+        [FilesControllerEvent.FileUploadFinished]: { uploadedFile },
+      })
 
       if (toastId) {
         if (this.mobileDevice && canShowProgressNotification) {
@@ -632,6 +675,12 @@ export class FilesController extends AbstractViewController<FilesControllerEvent
   notifyObserversOfUploadedFileLinkingToCurrentNote(fileUuid: string) {
     this.notifyEvent(FilesControllerEvent.FileUploadedToNote, {
       [FilesControllerEvent.FileUploadedToNote]: { uuid: fileUuid },
+    })
+  }
+
+  uploadAndInsertFileToCurrentNote(fileOrHandle: File | FileSystemFileHandle) {
+    this.notifyEvent(FilesControllerEvent.UploadAndInsertFile, {
+      [FilesControllerEvent.UploadAndInsertFile]: { fileOrHandle },
     })
   }
 

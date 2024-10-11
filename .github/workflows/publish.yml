@@ -53,14 +53,12 @@ jobs:
       - name: Build
         run: yarn build:snjs
       - name: Login to Docker Hub
-        if: "${{ contains(github.event.head_commit.message, 'skip e2e') == false }}"
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Publish SNJS Docker image for E2E testing
-        if: "${{ contains(github.event.head_commit.message, 'skip e2e') == false }}"
         run: |
           yarn docker build @standardnotes/snjs -t standardnotes/snjs:${{ github.sha }}
           docker push standardnotes/snjs:${{ github.sha }}
@@ -185,13 +183,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
-        if: "${{ contains(github.event.head_commit.message, 'skip e2e') == false }}"
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Publish SNJS Docker image as stable
-        if: "${{ contains(github.event.head_commit.message, 'skip e2e') == false }}"
         run: |
           docker pull standardnotes/snjs:${{ github.sha }}
           docker tag standardnotes/snjs:${{ github.sha }} standardnotes/snjs:latest

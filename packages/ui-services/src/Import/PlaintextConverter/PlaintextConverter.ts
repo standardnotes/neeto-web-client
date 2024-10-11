@@ -1,4 +1,4 @@
-import { parseFileName } from '@standardnotes/filepicker'
+import { parseFileName } from '@standardnotes/utils'
 import { Converter } from '../Converter'
 
 export class PlaintextConverter implements Converter {

@@ -10,18 +10,6 @@ export async function readFile(file: File): Promise<Uint8Array> {
   })
 }
 
-export function parseFileName(fileName: string): {
-  name: string
-  ext: string
-} {
-  const pattern = /(?:\.([^.]+))?$/
-  const extMatches = pattern.exec(fileName)
-  const ext = extMatches?.[1] || ''
-  const name = fileName.includes('.') ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName
-
-  return { name, ext }
-}
-
 export function saveFile(name: string, bytes: Uint8Array): void {
   const link = document.createElement('a')
   const blob = new Blob([bytes], {

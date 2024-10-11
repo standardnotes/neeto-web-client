@@ -1,8 +1,7 @@
 import { getBase64FromBlob } from '@/Utils'
-import { parseFileName } from '@standardnotes/filepicker'
+import { parseFileName, sanitizeFileName } from '@standardnotes/utils'
 import { MobileDeviceInterface } from '@standardnotes/snjs'
 import { addToast, ToastType, dismissToast } from '@standardnotes/toast'
-import { sanitizeFileName } from '@standardnotes/ui-services'
 
 export const downloadBlobOnAndroid = async (
   mobileDevice: MobileDeviceInterface,

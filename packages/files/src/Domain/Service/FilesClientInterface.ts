@@ -23,6 +23,7 @@ export interface FilesClientInterface {
   finishUpload(
     operation: EncryptAndUploadFileOperation,
     fileMetadata: FileMetadata,
+    uuid: string,
   ): Promise<FileItem | ClientDisplayableError>
 
   downloadFile(

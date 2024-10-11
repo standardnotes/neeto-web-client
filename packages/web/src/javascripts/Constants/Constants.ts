@@ -30,6 +30,8 @@ export const SMART_TAGS_FEATURE_NAME = 'Smart Tags'
 export const SYNC_TIMEOUT_DEBOUNCE = 350
 export const SYNC_TIMEOUT_NO_DEBOUNCE = 100
 
+export const IS_CHROME: boolean = /^(?=.*Chrome).*/i.test(navigator.userAgent)
+
 type EditorMetadata = {
   icon: IconType
   subtleIcon?: IconType

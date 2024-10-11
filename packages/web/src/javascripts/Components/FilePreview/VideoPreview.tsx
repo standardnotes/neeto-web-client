@@ -9,6 +9,7 @@ type Props = {
   file: FileItem
   filesController: FilesController
   objectUrl: string
+  isEmbeddedInSuper: boolean
 }
 
 /**
@@ -17,7 +18,7 @@ type Props = {
  * when not using the <source/> tag.
  * We show an error message if neither works.
  */
-const VideoPreview = ({ file, filesController, objectUrl }: Props) => {
+const VideoPreview = ({ file, filesController, objectUrl, isEmbeddedInSuper }: Props) => {
   const [showError, setShowError] = useState(false)
   const [shouldTryFallback, setShouldTryFallback] = useState(false)
 
@@ -65,7 +66,7 @@ const VideoPreview = ({ file, filesController, objectUrl }: Props) => {
     <video
       className="h-full w-full"
       controls
-      autoPlay
+      autoPlay={!isEmbeddedInSuper}
       onError={() => {
         setShouldTryFallback(true)
       }}

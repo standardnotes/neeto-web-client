@@ -44,8 +44,9 @@
     "@types/react-native-vector-icons/@types/react": "17.0.2",
     "@types/react-native/@types/react": "17.0.2",
     "@types/hoist-non-react-statics/@types/react": "17.0.2",
-    "@lexical/clipboard@0.14.3": "patch:@lexical/clipboard@npm:0.14.3#.yarn/patches/@lexical-clipboard-npm-0.14.3-58877f1e45.patch",
-    "@lexical/rich-text@0.14.3": "patch:@lexical/rich-text@npm:0.14.3#.yarn/patches/@lexical-rich-text-npm-0.14.3-02ac98ca96.patch"
+    "@lexical/clipboard@0.16.0": "patch:@lexical/clipboard@npm:0.16.0#.yarn/patches/@lexical-clipboard-npm-0.16.0-3053c4af9c.patch",
+    "@lexical/rich-text@0.16.0": "patch:@lexical/rich-text@npm:0.16.0#.yarn/patches/@lexical-rich-text-npm-0.16.0-f484a17832.patch",
+    "@lexical/list@0.16.0": "patch:@lexical/list@npm:0.16.0#.yarn/patches/@lexical-list-npm-0.16.0-8f91da4ad5.patch"
   },
   "dependencies": {
     "@standardnotes/snjs": "workspace:*"

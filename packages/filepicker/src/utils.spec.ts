@@ -1,4 +1,5 @@
-import { formatSizeToReadableString, parseFileName } from './utils'
+import { formatSizeToReadableString } from './utils'
+import { parseFileName } from '@standardnotes/utils'
 
 describe('utils', () => {
   describe('parseFileName', () => {
