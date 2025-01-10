@@ -1,5 +1,14 @@
 # Standard Notes
 
+#### Table of Contents
+- [Why Standard Notes?](#why-standard-notes)
+- [Creating your private notes account](#creating-your-private-notes-account)
+- [Publish a Blog](#publish-a-blog)
+- [Community](#community)
+- [FAQ's](#faqs)
+- [Docker setup](#docker-setup)
+- [Running Web App in Development Mode](#running-web-app-in-development-mode)
+
 Standard Notes is an end-to-end encrypted note-taking app for digitalists and professionals. Capture your notes, files, and life’s work all in one secure place.
 
 [![latest release version](https://img.shields.io/github/v/release/standardnotes/app)](https://github.com/standardnotes/app/releases)
@@ -8,10 +17,14 @@ Standard Notes is an end-to-end encrypted note-taking app for digitalists and pr
 
 ### Why Standard Notes?
 
+Security without compromise. [Features.](https://standardnotes.com/features)
+
 - End-to-end encrypted sync. Only you can read your notes.
 - Fast, free, and encrypted cross-platform sync on unlimited devices.
 - Public source code with ability to self-host your own server in a [few easy steps](https://standardnotes.com/help/self-hosting/getting-started).
 - A strong focus on longevity and sustainability. [Learn more](https://standardnotes.com/longevity).
+
+---
 
 ### Creating your private notes account
 
@@ -25,11 +38,15 @@ Standard Notes is an end-to-end encrypted note-taking app for digitalists and pr
 	- [Android](https://play.google.com/store/apps/details?id=com.standardnotes)
 4. You're all set. Standard Notes comes out of the box with end-to-end encrypted sync on all your devices.
 
+---
+
 ### Publish a Blog
 
 Standard Notes is a dependable environment to do your most important work, including publishing your ideas to the world. Listed allows you to create an online publication with automatic email newsletters delivered to your readers, directly from Standard Notes.
 
 [Learn more about Listed.](https://listed.to/)
+
+---
 
 ### Community
 
@@ -41,7 +58,29 @@ Join us on
 
 Developers can create and publish their own extensions. Visit the [documentation hub](https://standardnotes.com/help/plugins/intro) to learn more.
 
+---
+
+### FAQ's
+
 Questions? Find answers on our [Help page](https://standardnotes.com/help).
+
+General - [I've forgotten my password. What should I do?](https://standardnotes.com/help/6/i-ve-forgotten-my-password-what-should-i-do)
+
+Privacy & Longevity - [Who can read my private notes?](https://standardnotes.com/help/1/who-can-read-my-private-notes)
+
+Usage - [What are note types and editors?](https://standardnotes.com/help/77/what-are-editors)
+
+Subscription Account - [How do I manage/modify my subscription?](https://standardnotes.com/help/13/how-do-i-manage-modify-my-extended-subscription)
+
+Two-factor Authentication - [How do I enable two-factor authentication for my account?](https://standardnotes.com/help/25/how-do-i-enable-two-factor-authentication-for-my-account)
+
+Note History & Backups - [How do I enable note version history?](https://standardnotes.com/help/26/how-do-i-enable-note-version-history)
+
+Self-hosting - [Can I self-host Standard Notes?](https://standardnotes.com/help/47/can-i-self-host-standard-notes)
+
+Listed - [Creating a Blog From Your Notes with Listed and Standard Notes](https://standardnotes.com/help/60/creating-a-blog-from-your-notes-with-listed-and-standard-notes)
+
+Plugins - [Introduction to plugins](https://standardnotes.com/help/plugins/intro)
 
 ---
 
@@ -57,6 +96,8 @@ Our web app is compiled into a folder of static HTML, JS, and CSS files. You can
 6. You can then use Python to serve this folder over http: `python -m http.server 8080`
 
 You can now access the app at `http://localhost:8080`.
+
+[Learn more about Docker](https://standardnotes.com/help/self-hosting/docker).
 
 ### Running Web App in Development Mode
 
