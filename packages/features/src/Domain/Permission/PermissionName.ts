@@ -41,4 +41,5 @@ export enum PermissionName {
   Vaults = 'app:vaults',
   SharedVaults = 'server:shared-vaults',
   ProtonTheme = 'theme:proton',
+  ContentLimit = 'server:content-limit',
 }
