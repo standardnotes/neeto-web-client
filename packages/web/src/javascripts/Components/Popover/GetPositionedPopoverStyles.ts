@@ -78,10 +78,22 @@ const getStylesFromRect = (options: {
   const shouldApplyMobileWidth = isMobileScreen() && disableMobileFullscreenTakeover && !disableApplyingMobileWidth
   const marginForMobile = percentOf(10, window.innerWidth)
 
+  let xTranslation = shouldApplyMobileWidth ? marginForMobile / 2 : Math.floor(rect.x)
+  let yTranslation = Math.floor(rect.y)
+
+  // There is a bug in Chrome that results in blurry results from translate calls:
+  //
+  //   https://stackoverflow.com/questions/32034574/font-looks-blurry-after-translate-in-chrome
+  //
+  // To work around this issue and ensure the right click menu is always pixel perfect,
+  // ensure even numbers are used.
+  xTranslation = Math.floor(xTranslation / 2) * 2
+  yTranslation = Math.floor(yTranslation / 2) * 2
+
   return {
     willChange: 'transform',
-    '--translate-x': `${shouldApplyMobileWidth ? marginForMobile / 2 : Math.floor(rect.x)}px`,
-    '--translate-y': `${Math.floor(rect.y)}px`,
+    '--translate-x': `${xTranslation}px`,
+    '--translate-y': `${yTranslation}px`,
     '--offset': `${options.offset}px`,
     transform: 'translate3d(var(--translate-x), var(--translate-y), 0)',
     '--transform-origin': getTransformOrigin(options.side, options.align),
