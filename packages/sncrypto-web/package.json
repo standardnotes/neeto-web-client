@@ -36,7 +36,7 @@
     "@babel/preset-env": "*",
     "@types/libsodium-wrappers": "0.7.10",
     "@types/node": "^18.11.9",
-    "@types/uuid": "^8.3.4",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "babel-loader": "^9.1.0",
     "chai": "^4.3.7",
