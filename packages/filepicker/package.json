@@ -30,6 +30,6 @@
     "@standardnotes/files": "workspace:*",
     "@standardnotes/utils": "workspace:*",
     "@types/wicg-file-system-access": "^2023.10.4",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.2.1"
   }
 }
