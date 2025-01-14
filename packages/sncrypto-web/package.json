@@ -43,7 +43,7 @@
     "connect": "^3.7.0",
     "eslint": "*",
     "eslint-plugin-prettier": "*",
-    "regenerator-runtime": "^0.13.10",
+    "regenerator-runtime": "^0.14.1",
     "serve-static": "^1.15.0",
     "ts-loader": "^9.4.1",
     "typedarray-to-buffer": "^4.0.0",
