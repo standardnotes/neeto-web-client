@@ -37,7 +37,7 @@ jobs:
           yarn install --no-immutable
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.CI_PAT_TOKEN }}
           title: "${{ 'chore(deps): upgrade snjs' }}"

@@ -46,7 +46,7 @@ jobs:
           number: ${{ steps.find-pull-request.outputs.number }}
           sha: ${{ steps.find-pull-request.outputs.head-sha }}
 
-      - uses: peter-evans/create-pull-request@v4
+      - uses: peter-evans/create-pull-request@v6
         if: startsWith(github.event.head_commit.message, 'chore(deps)') == false && startsWith(github.event.head_commit.message, 'chore(deps-dev)') == false
         with:
           token: ${{ secrets.CI_PAT_TOKEN }}
