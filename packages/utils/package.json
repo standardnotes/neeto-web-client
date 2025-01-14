@@ -31,7 +31,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@types/dompurify": "^2.4.0",
+    "@types/dompurify": "^3.0.5",
     "@types/jest": "^29.2.3",
     "@types/jsdom": "^20.0.1",
     "@types/lodash": "^4.14.189",
