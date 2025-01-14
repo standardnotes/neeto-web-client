@@ -48,6 +48,7 @@ export const Web_TYPES = {
   IsMobileDevice: Symbol.for('IsMobileDevice'),
   IsNativeIOS: Symbol.for('IsNativeIOS'),
   IsNativeMobileWeb: Symbol.for('IsNativeMobileWeb'),
+  IsWebApp: Symbol.for('IsWebApp'),
   IsTabletOrMobileScreen: Symbol.for('IsTabletOrMobileScreen'),
   LoadPurchaseFlowUrl: Symbol.for('LoadPurchaseFlowUrl'),
   OpenSubscriptionDashboard: Symbol.for('OpenSubscriptionDashboard'),

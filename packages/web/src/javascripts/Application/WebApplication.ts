@@ -38,6 +38,7 @@ import {
   IsMobileDevice,
   IsNativeIOS,
   IsNativeMobileWeb,
+  IsWebApp,
   KeyboardService,
   PluginsServiceInterface,
   RouteServiceInterface,
@@ -679,5 +680,9 @@ export class WebApplication extends SNApplication implements WebApplicationInter
 
   get isNativeMobileWebUseCase(): IsNativeMobileWeb {
     return this.deps.get<IsNativeMobileWeb>(Web_TYPES.IsNativeMobileWeb)
+  }
+
+  get isWebAppUseCase(): IsWebApp {
+    return this.deps.get<IsWebApp>(Web_TYPES.IsWebApp)
   }
 }

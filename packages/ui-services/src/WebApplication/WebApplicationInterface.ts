@@ -26,6 +26,7 @@ export interface WebApplicationInterface extends ApplicationInterface {
   handleReceivedLinkEvent(item: { link: string; title: string }): Promise<void>
   handleOpenFilePreviewEvent(item: { id: string }): void
   isNativeMobileWeb(): boolean
+  isWebApp(): boolean
   handleAndroidBackButtonPressed(): void
   addAndroidBackHandlerEventListener(listener: () => boolean): (() => void) | undefined
   setAndroidBackHandlerFallbackListener(listener: () => boolean): void

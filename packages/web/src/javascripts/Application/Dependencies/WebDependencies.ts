@@ -8,6 +8,7 @@ import {
   IsMobileDevice,
   IsNativeIOS,
   IsNativeMobileWeb,
+  IsWebApp,
   KeyboardService,
   PluginsService,
   RouteService,
@@ -82,6 +83,10 @@ export class WebDependencies extends DependencyContainer {
 
     this.bind(Web_TYPES.IsNativeMobileWeb, () => {
       return new IsNativeMobileWeb(application.environment)
+    })
+
+    this.bind(Web_TYPES.IsWebApp, () => {
+      return new IsWebApp(application.environment)
     })
 
     this.bind(Web_TYPES.IsGlobalSpellcheckEnabled, () => {

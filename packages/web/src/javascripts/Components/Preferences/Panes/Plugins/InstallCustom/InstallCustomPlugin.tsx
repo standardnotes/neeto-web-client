@@ -19,6 +19,8 @@ const InstallCustomPlugin: FunctionComponent<Props> = ({ className = '' }) => {
 
   const confirmableEnd = useRef<HTMLDivElement>(null)
 
+  const isWebApp = useState(application.isWebApp());
+
   useEffect(() => {
     if (confirmablePlugin) {
       confirmableEnd.current?.scrollIntoView({ behavior: 'smooth' })
@@ -47,7 +49,8 @@ const InstallCustomPlugin: FunctionComponent<Props> = ({ className = '' }) => {
           <PreferencesSegment>
             <div>
               <DecoratedInput
-                placeholder={'Enter Plugin URL'}
+                disabled = {isWebApp}
+                placeholder={(isWebApp) ? 'Web App External Plugin Downloads Not Supported' : 'Enter Plugin URL'}
                 value={customUrl}
                 onChange={(value) => {
                   setCustomUrl(value)
@@ -56,7 +59,7 @@ const InstallCustomPlugin: FunctionComponent<Props> = ({ className = '' }) => {
             </div>
             <Button
               hidden={customUrl.length === 0}
-              disabled={customUrl.length === 0}
+              disabled={customUrl.length === 0 || isWebApp}
               className="mt-4 min-w-20"
               primary
               label="Install"
