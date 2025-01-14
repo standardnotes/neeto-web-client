@@ -26,7 +26,7 @@ import {
   $createHorizontalRuleNode,
   $isHorizontalRuleNode,
 } from '@lexical/react/LexicalHorizontalRuleNode'
-import { $isParagraphNode, $isTextNode, LexicalNode } from 'lexical'
+import { $isParagraphNode, $isTextNode, LexicalNode, $createTextNode } from 'lexical'
 import {
   $createRemoteImageNode,
   $isRemoteImageNode,
@@ -71,6 +71,42 @@ const IMAGE: TextMatchTransformer = {
     textNode.replace(imageNode)
   },
   trigger: ')',
+  type: 'text-match',
+}
+
+export const ARROW_DOUBLE: TextMatchTransformer = {
+  dependencies: [],
+  export: () => null,
+  importRegExp: /<-> /,
+  regExp: /<-> $/,
+  replace: (textNode) => {
+    textNode.replace($createTextNode('↔ '))
+  },
+  trigger: ' ',
+  type: 'text-match',
+}
+
+export const ARROW_RIGHT: TextMatchTransformer = {
+  dependencies: [],
+  export: () => null,
+  importRegExp: /-> /,
+  regExp: /-> $/,
+  replace: (textNode) => {
+    textNode.replace($createTextNode('→ '))
+  },
+  trigger: ' ',
+  type: 'text-match',
+}
+
+export const ARROW_LEFT: TextMatchTransformer = {
+  dependencies: [],
+  export: () => null,
+  importRegExp: /<- /,
+  regExp: /<- $/,
+  replace: (textNode) => {
+    textNode.replace($createTextNode('← '))
+  },
+  trigger: ' ',
   type: 'text-match',
 }
 
@@ -247,6 +283,9 @@ export const MarkdownTransformers = [
   CHECK_LIST,
   IMAGE,
   INLINE_FILE,
+  ARROW_DOUBLE,
+  ARROW_RIGHT,
+  ARROW_LEFT,
   ...ELEMENT_TRANSFORMERS,
   ...MULTILINE_ELEMENT_TRANSFORMERS,
   ...TEXT_FORMAT_TRANSFORMERS,
