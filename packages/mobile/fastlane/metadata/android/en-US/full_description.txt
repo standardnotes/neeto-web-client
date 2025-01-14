@@ -1,0 +1,38 @@
+Standard Notes is a secure and private notes app. It syncs your notes securely across all your devices, including your Android devices, Windows, iOS, Linux, and Web.
+
+Private means your notes are end-to-end encrypted, so only you can read your notes. Even we can't read the contents of your notes.
+
+Simple means it does one job and does it well. Standard Notes is a safe and lasting place for your life's work. Our focus is making it easy to write notes wherever you are and syncing them with encryption to all your devices.
+
+Our users love us for:
+• Personal Notes
+• Tasks & Todos
+• Passwords & Keys
+• Code & Technical Procedures
+• Private Journal
+• Meeting Notes
+• Cross-platform Scratchpad
+• Books, Recipes, & Movies
+• Health & Fitness Log
+
+Standard Notes comes free with:
+• Seamless sync across all your devices, with easy to use applications on Android, Windows, Linux, iPhone, iPad, Mac, and web browsers.
+• Offline access, so you can access your downloaded notes even without a connection.
+• No limit on number of devices.
+• No limit on number of notes.
+• Passcode lock protection, along with fingerprint protection.
+• A tagging system to organize your notes (like #work, #ideas, #passwords, #crypto).
+• The ability to pin, lock, protect, and move notes to trash, which allows you to recover deleted notes until the trash is emptied.
+
+Standard Notes is completely open-source, which means when we say your notes are encrypted with industry-leading XChaCha-20 encryption, and that only you can read your notes, you don't have to take our word for it. Our code is open to the world to audit.
+
+We made Standard Notes simple because longevity is important to us. We want to make sure we're here, protecting your notes, for the next hundred years. You shouldn't have to find a new notes app every year.
+
+To sustain our development, we offer an optional paid program called Standard Notes Extended. Extended gives you access to powerful tools including:
+• Productivity editors (like Markdown, Code, Spreadsheets)
+• Beautiful themes (like Midnight, Focus, Solarized Dark)
+• Powerful cloud tools including daily backups of your encrypted data delivered to your email inbox every day, or backed up to your cloud provider (like Dropbox and Google Drive).
+
+You can learn more about Extended at standardnotes.com/extended.
+
+We're always happy to talk, whether it be a question, thought, or issue. Please feel free to email us any time at help@standardnotes.com. When you take the time to send us a message, we'll be sure to do the same.
