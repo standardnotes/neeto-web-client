@@ -27,7 +27,7 @@
   "dependencies": {
     "@standardnotes/common": "^1.50.0",
     "@standardnotes/domain-core": "^1.40.0",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.2.1"
   },
   "devDependencies": {
     "@types/jest": "^29.2.3",
