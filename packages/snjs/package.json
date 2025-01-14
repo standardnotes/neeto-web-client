@@ -64,7 +64,7 @@
     "dom-storage": "^2.1.0",
     "eslint": "*",
     "eslint-plugin-prettier": "*",
-    "exports-loader": "^4.0.0",
+    "exports-loader": "^5.0.0",
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
     "jsdom": "^20.0.2",
