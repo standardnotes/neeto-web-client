@@ -23767,12 +23767,12 @@ __metadata:
   linkType: hard
 
 "react-native-mmkv@npm:^2.6.2":
-  version: 2.10.1
-  resolution: "react-native-mmkv@npm:2.10.1"
+  version: 2.11.0
+  resolution: "react-native-mmkv@npm:2.11.0"
   peerDependencies:
     react: "*"
     react-native: ">=0.71.0"
-  checksum: 2db42a667acd104047ddf307e852ffd9d9c6302454364fcc4cd35d8510d6f500bcd3562e14d95ae7fd520eac1cd3cc8a239c539a7339b70a4e6fd2d3f70daee7
+  checksum: 23ba624db8a4c530532aaab78705b58d1c9eefc3173dae3b1f86c8cb4d0e5abe3d175079c263251bfed406dc9f6ccda3657f138177916866ea0c0dc8fa3d2389
   languageName: node
   linkType: hard
 
