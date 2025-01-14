@@ -40,6 +40,6 @@
     "@standardnotes/models": "workspace:*",
     "@standardnotes/responses": "workspace:*",
     "@standardnotes/utils": "workspace:*",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.2.1"
   }
 }
