@@ -77,7 +77,7 @@
     "jest-environment-jsdom": "^29.3.1",
     "lint-staged": ">=13",
     "mini-css-extract-plugin": "^2.7.2",
-    "minimatch": "^5.1.1",
+    "minimatch": "^9.0.3",
     "mobx": "^6.8.0",
     "mobx-react-lite": "^3.4.2",
     "npm-check-updates": "*",
