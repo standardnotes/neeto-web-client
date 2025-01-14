@@ -27,14 +27,14 @@
   "dependencies": {
     "@standardnotes/sncrypto-common": "workspace:*",
     "buffer": "^6.0.3",
-    "libsodium-wrappers": "0.7.10",
+    "libsodium-wrappers": "0.7.13",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@babel/core": "*",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/preset-env": "*",
-    "@types/libsodium-wrappers": "0.7.10",
+    "@types/libsodium-wrappers": "0.7.13",
     "@types/node": "^18.11.9",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
