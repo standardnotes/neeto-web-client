@@ -52,7 +52,7 @@
     "@standardnotes/utils": "workspace:*",
     "@types/crypto-js": "^4.1.1",
     "@types/jest": "^29.2.3",
-    "@types/jsdom": "^20.0.1",
+    "@types/jsdom": "^21.1.6",
     "@types/libsodium-wrappers": "^0.7.10",
     "@types/semver": "^7.3.13",
     "@typescript-eslint/eslint-plugin": "*",
